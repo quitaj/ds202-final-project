@@ -1,6 +1,6 @@
 library(tidyverse)
 library(stringr)
-df = read.csv("~/Documents/Projects/DS_202/rym_top_5000_all_time.csv")
+df = read.csv("rym_top_5000_all_time.csv")
 
 #Converting to numeric
 df$Number.of.Ratings = as.numeric(gsub(",", "", df$Number.of.Ratings))
