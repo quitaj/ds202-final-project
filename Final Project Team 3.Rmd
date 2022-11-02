@@ -84,6 +84,8 @@ Answering this question will involve determining the average number of ratings/r
 
 -What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
 
+By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
+
 -How do scores for genres change over time? **Jolie**
 
 I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not.
