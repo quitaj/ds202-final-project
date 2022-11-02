@@ -73,3 +73,13 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 -What is the relationship between score and other variables, such as genre, descriptors, and artist?
 
 -How do scores for genres change over time?
+
+**Outline of Exploration:**
+
+-What is the relationship between the release date and the score of the album? **Quita**
+
+-What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website. **Soren**
+
+-What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
+
+-How do scores for genres change over time? **Jolie**
