@@ -77,6 +77,12 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 **Outline of Exploration:**
 
 -What is the relationship between the release date and the score of the album? **Quita**
+```{r}
+library(ggplot2)
+ggplot(df_final, aes(x = `Release.Date`, y = `Average.Rating`)) +
+  geom_point()
+```
+*This scatter plots shows the relationship between the Release.Date and Average.Rating. There does not seem to be an obvious meaningful relationship between the two variables. Most of the albums have an average rating above 3.6 but the release date does not appear to impact that based on this scatter plot.   *
 
 -What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website. **Soren**
 
