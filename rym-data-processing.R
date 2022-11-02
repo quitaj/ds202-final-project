@@ -19,10 +19,11 @@ df3 = df2
 #Add column for average rating, average reviews, average ratings, and number of appearances per artist
 df3 = df3 %>%
   group_by(Artist.Name) %>%
-  mutate(Artist.Average.Score = mean(Average.Rating)) %>%
-  mutate(Artist.Average.Reviews = mean(Number.of.Reviews)) %>%
-  mutate(Artist.Average.Ratings = mean(Number.of.Ratings)) %>%
-  mutate(Artist.Frequency = nrow(as.data.frame(Artist.Name)))
+  mutate(Artist.Average.Score = mean(Average.Rating),
+         Artist.Average.Reviews = mean(Number.of.Reviews),
+         Artist.Average.Ratings = mean(Number.of.Ratings),
+         Artist.Frequency = nrow(as.data.frame(Artist.Name))
+         )
 
 View(df3)
 
