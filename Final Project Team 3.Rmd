@@ -1,12 +1,14 @@
-Libraries and loading data
+## Libraries and loading data
 
 ```{r}
 library(tidyverse)
 library(stringr)
 df = read.csv("https://raw.githubusercontent.com/wagstrom/ds-202-final-project/main/rym_top_5000_all_time.csv")
 ```
+In this chunk we read in our data from our working repository.
 
-Converting to numeric
+
+## Converting to numeric
 
 ```{r}
 df$Number.of.Ratings = as.numeric(gsub(",", "", df$Number.of.Ratings))
@@ -15,8 +17,10 @@ df$Average.Rating = as.numeric(df$Average.Rating)
 df$Number.of.Reviews = as.numeric(df$Number.of.Reviews)
 df2 = df
 ```
+In this chunk we set our ratings, number of ratings, rankings, and number of reviews as numerical values instead of string values.
 
-Converting comma-separated strings into separate columns
+
+## Converting comma-separated strings into separate columns
 
 ```{r}
 df2[c('Genre_1', 'Genre_2', 'Genre_3', 'Genre_4', 'Genre_5')] <- str_split_fixed(df2$Genres, ', ', 5)
@@ -25,8 +29,10 @@ df2[c('Desc_1', 'Desc_2', 'Desc_3', 'Desc_4', 'Desc_5', 'Desc_6', 'Desc_7', 'Des
 sum(df2$Desc_10 != "")
 df3 = df2
 ```
+In this chunk we are splitting our genres and descripters into different columns that makes the album values less unique.
 
-Add column for average rating, average reviews, average ratings, and number of appearances per artist
+
+## Add column for average score, average reviews, average ratings, and number of appearances per artist
 
 ```{r}
 df3 = df3 %>%
@@ -39,8 +45,10 @@ df3 = df3 %>%
 
 df_final = df3
 ```
+In this chunk we are adding columns to find the averages of scores, reviews, number of ratings, and number of appearances for each artist. We do this so we can compare the individual values easier.
 
-Summaries
+
+## Summaries
 
 ```{r}
 nrow(unique(as.data.frame(df_final$Album)))
@@ -51,3 +59,4 @@ nrow(unique(as.data.frame(df_final$Genre_1)))
   #453 unique primary genres
 summary(df_final)
 ```
+In this chunk we are exploring the data to see how many unique albums, artists, and genres in the data. We also ran a summary of the dataframe so we could view it easier.
