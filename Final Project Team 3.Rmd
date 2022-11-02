@@ -80,8 +80,10 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 
 -What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website. **Soren**
 
-Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist\'s popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
+Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist's popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
 
 -What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
 
 -How do scores for genres change over time? **Jolie**
+
+I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not.
