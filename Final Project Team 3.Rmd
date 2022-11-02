@@ -86,4 +86,4 @@ Answering this question will involve determining the average number of ratings/r
 
 -How do scores for genres change over time? **Jolie**
 
-I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not.
+I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not. Grouping the smaller categories into larger umbrella categories such as just rock, pop, etc may also make trend analysis easier.
