@@ -35,6 +35,7 @@ In this chunk we are splitting our genres and descripters into different columns
 ## Add column for average score, average reviews, average ratings, and number of appearances per artist
 
 ```{r}
+library(lubridate)
 df3 = df3 %>%
   group_by(Artist.Name) %>%
   mutate(Artist.Average.Score = mean(Average.Rating),
@@ -119,3 +120,12 @@ By answering this question we will be able to have a better idea of how albums a
 -How do scores for genres change over time? **Jolie**
 
 I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not. Grouping the smaller categories into larger umbrella categories such as just rock, pop, etc may also make trend analysis easier.
+
+```{r}
+df_final %>% group_by(Genre_1)%>% summarise(
+  count = n()
+)%>% arrange(desc(count))
+```
+
+Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal,
+East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top ten genres the occur the most on the list.
