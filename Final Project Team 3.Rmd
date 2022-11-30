@@ -46,6 +46,28 @@ df3 = df3 %>%
 df_final = df3
 ```
 
+Dealing with Dates
+
+```{r}
+Year_useful = str_sub(df_final$Release.Date,-2,-1)
+
+library(lubridate)
+Year_start = NULL
+for(i in 1:5000){
+  if(Year_useful[i] <  22){
+    Year_start[i] = 20
+    }else{
+    Year_start[i] = 19
+  }
+}
+
+year = data.frame(Year_start, Year_useful)
+
+df_final$Year = paste(year$Year_start, year$Year_useful)
+df_final$Year = gsub(" ", "", df_final$Year)
+View(df_final)
+```
+
 In this chunk we are adding columns to find the averages of scores, reviews, number of ratings, and number of appearances for each artist. We do this so we can compare the individual values easier.
 
 ## Summaries
