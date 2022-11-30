@@ -66,7 +66,6 @@ year = data.frame(Year_start, Year_useful)
 
 df_final$Year = paste(year$Year_start, year$Year_useful)
 df_final$Year = gsub(" ", "", df_final$Year)
-View(df_final)
 ```
 
 In this chunk we are adding columns to find the averages of scores, reviews, number of ratings, and number of appearances for each artist. We do this so we can compare the individual values easier.
@@ -127,5 +126,19 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal,
-East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top ten genres the occur the most on the list.
+Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top ten genres the occur the most on the list.
+
+```{r}
+df_final%>% filter(Genre_1 == "Progressive Rock"|
+            Genre_1 == "Singer/Songwriter"|
+            Genre_1 == "Hard Bop"|
+            Genre_1 == "Film Score"|
+            Genre_1 == "Hard Rock"|
+            Genre_1 == "Heavy Metal"|
+            Genre_1 == "East Coast Hip Hop"
+            )%>% group_by(Genre_1 ,Year)%>% summarise(
+  count = n()
+)%>% ggplot(aes(x = Year,y = count, group = Genre_1, color = Genre_1)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, size = 10))
+```
+
+From the beginning of the 50s to the end of the 60s Hard Bop Jazz dominates. The 70s is the Rock era with Progressive and Hard Rock occurring much more than any other genre. Singer/Songwriter is close to the Hard Rock. The 80s was Heavy Metal. The 90s is East Coast Hip Hop. Singer/Songwriter genre boosted in the early 2000s.
