@@ -102,13 +102,13 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 
 ```{r}
 library(ggplot2)
-
-
+ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) 
 ```
 
 - What are the genres that dominated each decade?
 
 ```{r}
+
 
 ```
 
