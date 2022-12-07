@@ -233,3 +233,170 @@ The Zombies 4.08
 -What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
 
 By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
+
+
+
+
+# First: Identify Question
+# Question: What is the relationship between score and other variables, such as genre, descriptors, and artist?
+
+### Find the Top 10 Most Common Genres, Descriptors, and Artists
+
+```{r}
+## Genre
+df_final %>% group_by(Genre_1)%>% summarise(
+  count = n()
+)%>% arrange(desc(count))
+```
+
+- Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top 10 most common Genres.
+
+```{r}
+## Descriptor
+df_final %>% group_by(Desc_1)%>% summarise(
+  count = n()
+)%>% arrange(desc(count))
+```
+
+- Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top 10 most common Descriptors.
+
+```{r}
+## Artist
+df_final %>% group_by(Artist.Name)%>% summarise(
+  count = n()
+)%>% arrange(desc(count))
+```
+
+- Various Artists, Miles Davis, John Coltrane, Tom Waits, John Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock, Pharoah Sanders, and The Fall
+
+
+
+
+
+### Average Score of the Top 10 Most Common Genres, Descriptors, and Artists
+
+```{r}
+## Mean of all albums in the list
+mean(df_final$Average.Rating)
+```
+
+- The average score for all albums in the list is 3.771304.
+
+```{r}
+## Average score of Top 10 Genres
+df_final_genres <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Songwriter", "Hard Bop", "Film Score", "Hard Rock", 
+                                                "Heavy Metal", "East Coast Hip Hop", "Video Game Music", "Alternative Rock", "Progressive Metal"),]
+mean(df_final_genres$Average.Rating)
+```
+
+- The average score for albums with their primary genre in the top 10 most common genre is 3.775546.
+
+
+```{r}
+## Average score of Top 10 Descriptors
+df_final_descriptors <- df_final[df_final$Desc_1==c("male vocals", "instrumental", "energetic", "melodic", "melancholic",
+                                                    "female vocals", "atmospheric", "psychedelic", "passionate", "dark"),]
+mean(df_final_descriptors$Average.Rating)
+```
+
+- The average score for albums with their primary descriptor in the top 10 most common descriptors is 3.771124
+
+
+```{r}
+## Average score of Top 10 Artists
+df_final_artists <- df_final[df_final$Artist.Name=="Various Artists" |  df_final$Artist.Name=="Miles Davis" | df_final$Artist.Name=="John Coltrane" |  df_final$Artist.Name=="Tom Waits" |
+                            df_final$Artist.Name=="John Williams" | df_final$Artist.Name=="Bob Dylan" | df_final$Artist.Name=="The Beatles" |  df_final$Artist.Name=="Ennio Morricone" |
+                            df_final$Artist.Name=="Herbie Hancock" | df_final$Artist.Name=="Pharoah Sanders" | df_final$Artist.Name=="The Fall",]
+mean(df_final_artists$Average.Rating)
+```
+
+- The average score for albums with their artists in the top 10 most common artists is 3.855435.
+
+
+```{r}
+## Average Score of all Top 10's
+df_final_top10s <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Songwriter", "Hard Bop", "Film Score", "Hard Rock", 
+                                                "Heavy Metal", "East Coast Hip Hop", "Video Game Music", "Alternative Rock", "Progressive Metal") | 
+                            df_final$Desc_1==c("male vocals", "instrumental", "energetic", "melodic", "melancholic",
+                                                    "female vocals", "atmospheric", "psychedelic", "passionate", "dark") | 
+                            df_final$Artist.Name=="Various Artists" |  df_final$Artist.Name=="Miles Davis" | df_final$Artist.Name=="John Coltrane" |  df_final$Artist.Name=="Tom Waits" |
+                            df_final$Artist.Name=="John Williams" | df_final$Artist.Name=="Bob Dylan" | df_final$Artist.Name=="The Beatles" |  df_final$Artist.Name=="Ennio Morricone" |
+                            df_final$Artist.Name=="Herbie Hancock" | df_final$Artist.Name=="Pharoah Sanders" | df_final$Artist.Name=="The Fall",]
+mean(df_final_top10s$Average.Rating)
+```
+
+- The average score for an album with any of the previous top 10 values included in the album is 3.7976607.
+
+
+
+
+
+### Average Score of !Top 10 most common genres, descriptors, artists
+
+```{r}
+## Average score without top 10 most common Genres
+df_final_genres2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/Songwriter", "Hard Bop", "Film Score", "Hard Rock", 
+                                                "Heavy Metal", "East Coast Hip Hop", "Video Game Music", "Alternative Rock", "Progressive Metal"),]
+mean(df_final_genres2$Average.Rating)
+```
+
+- The average score when the top 10 most common primary genres are removed is 3.771201.
+
+
+```{r}
+## Average score without top 10 most common Descriptors
+df_final_descriptors2 <- df_final[!df_final$Desc_1==c("male vocals", "instrumental", "energetic", "melodic", "melancholic",
+                                                    "female vocals", "atmospheric", "psychedelic", "passionate", "dark"),]
+mean(df_final_descriptors2$Average.Rating)
+```
+
+- The average score when the top 10 most common primary descriptors are removed is 3.771311
+
+
+```{r}
+## Average score without top 10 most common Artists
+df_final_artists2 <- df_final[!df_final$Artist.Name=="Various Artists" &  !df_final$Artist.Name=="Miles Davis" & !df_final$Artist.Name=="John Coltrane" &  
+                             !df_final$Artist.Name=="Tom Waits" & !df_final$Artist.Name=="John Williams" & !df_final$Artist.Name=="Bob Dylan" & 
+                             !df_final$Artist.Name=="The Beatles" &  !df_final$Artist.Name=="Ennio Morricone" & !df_final$Artist.Name=="Herbie Hancock" & 
+                             !df_final$Artist.Name=="Pharoah Sanders" & !df_final$Artist.Name=="The Fall",]
+mean(df_final_artists2$Average.Rating)
+```
+
+- The average score when the top 10 most common artists are removed is 3.768916.
+
+
+```{r}
+## Average score without all top 10's
+df_final_top10s2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/Songwriter", "Hard Bop", "Film Score", "Hard Rock", 
+                                                "Heavy Metal", "East Coast Hip Hop", "Video Game Music", "Alternative Rock", "Progressive Metal") &
+                             !df_final$Desc_1==c("male vocals", "instrumental", "energetic", "melodic", "melancholic",
+                                                    "female vocals", "atmospheric", "psychedelic", "passionate", "dark") &
+                             !df_final$Artist.Name=="Various Artists" &  !df_final$Artist.Name=="Miles Davis" & !df_final$Artist.Name=="John Coltrane" &  
+                             !df_final$Artist.Name=="Tom Waits" & !df_final$Artist.Name=="John Williams" & !df_final$Artist.Name=="Bob Dylan" & 
+                             !df_final$Artist.Name=="The Beatles" &  !df_final$Artist.Name=="Ennio Morricone" & !df_final$Artist.Name=="Herbie Hancock" & 
+                             !df_final$Artist.Name=="Pharoah Sanders" & !df_final$Artist.Name=="The Fall",]
+mean(df_final_top10s2$Average.Rating)
+```
+
+- The average score when the top 10 most common artists, genres, and descriptors are removed is 3.768879.
+
+
+
+
+### Correlation matrix to find what is most correlated with score
+```{r}
+dummydf <- df_final
+
+dummydf$Genre_1 <- as.numeric(factor(dummydf$Genre_1))
+dummydf$Desc_1 <- as.numeric(factor(dummydf$Desc_1))
+dummydf$Artist.Name <-  as.numeric(factor(dummydf$Artist.Name))
+dummydf$Year <-  as.numeric(factor(dummydf$Year))
+dummydf$Number.of.Ratings <-  as.numeric(factor(dummydf$Number.of.Ratings))
+dummydf$Number.of.Reviews <-  as.numeric(factor(dummydf$Number.of.Reviews))
+
+dummydf2 <- subset(dummydf, select=c("Average.Rating","Artist.Name", "Genre_1", "Desc_1", "Year", "Number.of.Ratings", "Number.of.Reviews"))
+results <- cor(dummydf2)
+round(results,2)
+```
+
+- Using our correlation matrix we can see that Number.of.Reviews is our strongest predictor of Average Rating with Number.of.Ratings close behind. If we were making a model to predict the average rating for an album we would include the variables: Number.of.Reviews, Number.of.Ratings, and Year.
