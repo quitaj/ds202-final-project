@@ -118,11 +118,19 @@ I will group by decade to see the change in genre over time, using plots to see 
 
 ```{r}
 df_final %>% group_by(Genre_1)%>% summarise(
+  Average.Score = mean(Average.Rating),
   count = n()
 )%>% arrange(desc(count))
 ```
 
 Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top ten genres the occur the most on the list.
+
+```{r}
+df_final %>% group_by(Genre_1)%>% summarise(
+  Average.Score = mean(Average.Rating),
+  count = n()
+)%>% arrange(desc(Average.Score))
+```
 
 ```{r}
 df_final%>% filter(Genre_1 == "Progressive Rock"|
@@ -140,8 +148,76 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 From the beginning of the 50s to the end of the 60s Hard Bop Jazz dominates. The 70s is the Rock era with Progressive and Hard Rock occurring much more than any other genre. Singer/Songwriter is close to the Hard Rock. The 80s was Heavy Metal. The 90s is East Coast Hip Hop. Singer/Songwriter genre boosted in the early 2000s.
 
 ```{r}
-df_final %>% select(Artist.Name, Artist.Average.Score)%>% arrange(desc(Artist.Average.Score))
+df_final%>% filter(Genre_1 == "Hard Bop")%>% select(Genre_1,Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
 ```
+
+**Top Hard Bop**
+
+Giant Steps by John Coltrane	1960, Score 4.10
+Moanin' by Art Blakey and The Jazz Messengers	1959, Score 4.04
+
+```{r}
+df_final%>% filter(Genre_1 == "Progressive Rock"|Genre_1 == "Hard Rock")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
+```
+
+**Top Progressive Rock Albums**
+
+In the Court of the Crimson King by King Crimson, Released 1969, Score 4.30
+Wish You Were Here by Pink Floyd, Released 1975, Score 4.29
+
+**Top Hard Rock Album**
+
+Led Zeppelin [IV] by Led Zeppelin	1971	4.10
+
+Who's Next by The Who	1971	3.96
+
+```{r}
+df_final%>% filter(Genre_1 == "Singer/Songwriter")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
+```
+
+Top Singer/Songwriter Albums
+
+Blood on the Tracks	Bob Dylan	1975	4.16
+Either / Or Elliott Smith	1997	4.10
+
+```{r}
+df_final%>% filter(Genre_1 == "Heavy Metal")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
+```
+
+**Top Heavy Metal Albums**
+
+Paranoid	Black Sabbath	1970	4.19
+Master of Reality	Black Sabbath	1971	4.12
+Black Sabbath	Black Sabbath	1970	4.06
+Painkiller Judas Priest	1990	4.00
+
+```{r}
+df_final%>% filter(Genre_1 == "East Coast Hip Hop")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
+```
+
+**Top East Coast Hip Hop Albums**
+
+Illmatic	Nas	1994	4.20
+Enter the Wu-Tang (36 Chambers) Wu-Tang Clan	1993	4.19
+
+```{r}
+df_final %>% group_by(Artist.Name) %>% summarize(
+  Average.Score = mean(Average.Rating)
+)%>% arrange(desc(Average.Score))
+```
+
+Top Artists
+
+Mingus	4.34
+The Velvet Underground & Nico 4.23	
+Wu-Tang Clan	4.19
+Slint	4.15
+Godspeed You Black Emperor! 4.145
+Television 4.13
+DJ Shadow 4.11	
+Genius/GZA	4.11
+Milton Nascimento & Lô Borges	4.10
+The Zombies 4.08
 
 -What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
 
