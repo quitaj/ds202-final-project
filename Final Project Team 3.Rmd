@@ -112,10 +112,6 @@ ggplot(df_final, aes(x = `Release.Date`, y = `Average.Rating`)) +
 
 Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist's popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
 
--What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
-
-By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
-
 -How do scores for genres change over time? **Jolie**
 
 I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not. Grouping the smaller categories into larger umbrella categories such as just rock, pop, etc may also make trend analysis easier.
@@ -142,3 +138,11 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 ```
 
 From the beginning of the 50s to the end of the 60s Hard Bop Jazz dominates. The 70s is the Rock era with Progressive and Hard Rock occurring much more than any other genre. Singer/Songwriter is close to the Hard Rock. The 80s was Heavy Metal. The 90s is East Coast Hip Hop. Singer/Songwriter genre boosted in the early 2000s.
+
+```{r}
+df_final %>% select(Artist.Name, Artist.Average.Score)%>% arrange(desc(Artist.Average.Score))
+```
+
+-What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
+
+By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
