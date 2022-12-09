@@ -37,7 +37,7 @@ sum(df2$Desc_10 != "")
 df3 = df2
 ```
 
-In this chunk we are splitting our genres and descripters into different
+In this chunk we are splitting our genres and descriptors into different
 columns that makes the album values less unique.
 
 ## Add column for average score, average reviews, average ratings, and number of appearances per artist
@@ -74,6 +74,12 @@ year = data.frame(Year_start, Year_useful)
 
 df_final$Year = paste(year$Year_start, year$Year_useful)
 df_final$Year = gsub(" ", "", df_final$Year)
+
+Month = gsub("[^a-zA-Z]", "",df_final$Release.Date )
+df_final$Month = Month
+
+Day = parse_number(str_sub(df_final$Release.Date,,2))
+df_final$Day=factor(Day)
 ```
 
 In this chunk we are adding columns to find the averages of scores,
@@ -133,6 +139,29 @@ df_final%>%group_by(Year)%>% summarise(
 )%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
+```{r}
+df_final%>% filter(
+  !(Month=="")) %>%group_by(Month)%>%summarise(
+  Average.Score = mean(Average.Rating),
+  Year = Year
+  )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Month,y=Average.Score))+geom_point()
+```
+
+```{r}
+df_final%>% filter(
+  !(Month==""),!(Day==""))%>% group_by(Day)%>%summarise(
+  Average.Score = mean(Average.Rating)
+  )%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()
+```
+
+```{r}
+df_final%>% filter(
+  !(Month==""),!(Day==""))%>% group_by(Day)%>%summarise(
+  Average.Score = mean(Average.Rating),
+  Month = Month
+  )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()+facet_wrap(~Month)
+```
+
 -   What are the genres that dominated each decade?
 
 ```{r}
@@ -148,8 +177,10 @@ df_final%>%group_by(Year)%>% summarise(
 
 -What is the relationship between the number of reviews/ratings and the
 artist? This helps determine the relative popularity of artists on this
-website. **Soren** \# Question 2: Who are the most well-known artists on
-this website, and does that correlate with high scores?
+website.
+
+**Soren** \# Question 2: Who are the most well-known artists on this
+website, and does that correlate with high scores?
 
 Answering this question will involve determining the average number of
 ratings/reviews per artist. This can be accomplished using mutate
