@@ -1,3 +1,9 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 ## Libraries and loading data
 
 ```{r}
@@ -18,7 +24,8 @@ df$Number.of.Reviews = as.numeric(df$Number.of.Reviews)
 df2 = df
 ```
 
-In this chunk we set our ratings, number of ratings, rankings, and number of reviews as numerical values instead of string values.
+In this chunk we set our ratings, number of ratings, rankings, and
+number of reviews as numerical values instead of string values.
 
 ## Converting comma-separated strings into separate columns
 
@@ -30,7 +37,8 @@ sum(df2$Desc_10 != "")
 df3 = df2
 ```
 
-In this chunk we are splitting our genres and descripters into different columns that makes the album values less unique.
+In this chunk we are splitting our genres and descripters into different
+columns that makes the album values less unique.
 
 ## Add column for average score, average reviews, average ratings, and number of appearances per artist
 
@@ -68,7 +76,9 @@ df_final$Year = paste(year$Year_start, year$Year_useful)
 df_final$Year = gsub(" ", "", df_final$Year)
 ```
 
-In this chunk we are adding columns to find the averages of scores, reviews, number of ratings, and number of appearances for each artist. We do this so we can compare the individual values easier.
+In this chunk we are adding columns to find the averages of scores,
+reviews, number of ratings, and number of appearances for each artist.
+We do this so we can compare the individual values easier.
 
 ## Summaries
 
@@ -82,50 +92,132 @@ nrow(unique(as.data.frame(df_final$Genre_1)))
 summary(df_final)
 ```
 
-In this chunk we are exploring the data to see how many unique albums, artists, and genres in the data. We also ran a summary of the dataframe so we could view it easier.
+In this chunk we are exploring the data to see how many unique albums,
+artists, and genres in the data. We also ran a summary of the dataframe
+so we could view it easier.
 
 Our project idea is as follows:
 
-Our dataset is the list of the top 5000 rated albums on the website rateyourmusic.com. The dataset includes the ranking, album title, artist, release date, genre(s), descriptors, average rating, number of ratings, number of reviews. We have several questions we'd like to answer through statistical analysis and visualization, some of which are listed below:
+Our dataset is the list of the top 5000 rated albums on the website
+rateyourmusic.com. The dataset includes the ranking, album title,
+artist, release date, genre(s), descriptors, average rating, number of
+ratings, number of reviews. We have several questions we'd like to
+answer through statistical analysis and visualization, some of which are
+listed below:
 
--What is the relationship between the release date and the score of the album?
+-What is the relationship between the release date and the score of the
+album?
 
--What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website.
+-What is the relationship between the number of reviews/ratings and the
+artist? This helps determine the relative popularity of artists on this
+website.
 
--What is the relationship between score and other variables, such as genre, descriptors, and artist?
+-What is the relationship between score and other variables, such as
+genre, descriptors, and artist?
 
 -How do scores for genres change over time?
 
 **Outline of Exploration:**
 
--What is the relationship between the release date and the score of the album? **Quita**
+-What is the relationship between the release date and the score of the
+album? **Quita**
 
 ```{r}
 library(ggplot2)
 ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) 
 ```
 
-- What are the genres that dominated each decade?
+-   What are the genres that dominated each decade?
 
 ```{r}
 
 
 ```
 
+-Artist that dominated the genres?
 
--Artist that dominated the genres? 
 ```{r}
 
 ```
 
+# Question 2: Who are the most well-known artists on this website, and does that correlate with high scores?
 
--What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website. **Soren**
+Answering this question will involve determining the average number of
+ratings/reviews per artist. This can be accomplished using mutate
+statements to create two new columns, one for average number of ratings
+per artist, and one for average number of reviews per artist. The number
+of reviews per artist will be much lower than the number of ratings,
+because writing a review takes much more time and effort than simply
+providing a score from 1-5. This is not a reflection of an artist's
+popularity outside the context of this website, as this is a website for
+dedicated fans of music, who tend to have different tastes than the
+general public.
 
-Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist's popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
+The average number of ratings and reviews per artist from each of their
+appearances on this list is already determined by the data processing
+above, so the only step remaining for this question is to visualize and
+communicate the results.
+
+The plot below shows the top 10 artists by average number of ratings.
+Radiohead tops the list, followed by The Velvet Underground and Nirvana.
+These are all very popular mainstream artists, so there is no surprise
+here. They all have very high average scores as well, indicating that
+these artists are as beloved as they are famous. There are some less
+well-known artists on this list as well, such as Slint and Godspeed You,
+Black Emperor!, which may indicate that these artists are more popular
+among music enthusiast crowds like the RateYourMusic community than
+among the general public.
+
+```{r}
+# Artist popularity by ratings
+df_sorted_ratings = df_final[order(-df_final$Artist.Average.Ratings),]
+df_sorted_ratings = df_sorted_ratings[,c(3, 25, 27)]
+df_sorted_ratings = unique(df_sorted_ratings)[1:10,]
+df_sorted_ratings %>%
+  ggplot(aes(x = reorder(Artist.Name, Artist.Average.Ratings), 
+             y = Artist.Average.Ratings, fill = Artist.Name)) + 
+  geom_bar(stat="identity") + coord_flip() + 
+  theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) +
+  theme(legend.position="none") + 
+  labs(x = "Artist Name", y = "Number of Ratings") + 
+  geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1)) 
+```
+
+The next plot, shown below, includes the top 10 artists by average
+number of reviews. Again, The Velvet Underground and Nirvana are in the
+top 3, but Pink Floyd takes the third spot this time around, followed
+closely by Radiohead.
+
+There are two outliers in the top 10 in terms of score here. Both Guns
+N' Roses and The Sex Pistols have a much lower average score than the
+others on this list. One conclusion that could be drawn from this
+statistic it that while these two artists are clearly very well known,
+they are not as widely beloved among music enthusiasts as others on this
+list, and their fame may somewhat overrate the quality of their music.
+
+```{r}
+# Artist popularity by reviews
+df_sorted_reviews = df_final[order(-df_final$Artist.Average.Reviews),]
+df_sorted_reviews = df_sorted_reviews[,c(3, 25, 26)]
+df_sorted_reviews = unique(df_sorted_reviews)[1:10,]
+df_sorted_reviews %>%
+  ggplot(aes(x = reorder(Artist.Name, Artist.Average.Reviews), 
+             y = Artist.Average.Reviews, fill = Artist.Name)) + 
+  geom_bar(stat="identity") + coord_flip() + 
+  theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) +
+  theme(legend.position="none") + 
+  labs(x = "Artist Name", y = "Number of Reviews") + 
+  geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1))
+
+```
 
 -How do scores for genres change over time? **Jolie**
 
-I will group by decade to see the change in genre over time, using plots to see the counts of the genres in each decade. Using average score of songs in each genre, we can see if there is a trend or not. Grouping the smaller categories into larger umbrella categories such as just rock, pop, etc may also make trend analysis easier.
+I will group by decade to see the change in genre over time, using plots
+to see the counts of the genres in each decade. Using average score of
+songs in each genre, we can see if there is a trend or not. Grouping the
+smaller categories into larger umbrella categories such as just rock,
+pop, etc may also make trend analysis easier.
 
 ```{r}
 df_final %>% group_by(Genre_1)%>% summarise(
@@ -134,7 +226,9 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top ten genres the occur the most on the list.
+Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock,
+Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and
+Progressive Metal are the top ten genres the occur the most on the list.
 
 ```{r}
 df_final %>% group_by(Genre_1)%>% summarise(
@@ -156,7 +250,11 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 )%>% ggplot(aes(x = Year,y = count, group = Genre_1, color = Genre_1)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-From the beginning of the 50s to the end of the 60s Hard Bop Jazz dominates. The 70s is the Rock era with Progressive and Hard Rock occurring much more than any other genre. Singer/Songwriter is close to the Hard Rock. The 80s was Heavy Metal. The 90s is East Coast Hip Hop. Singer/Songwriter genre boosted in the early 2000s.
+From the beginning of the 50s to the end of the 60s Hard Bop Jazz
+dominates. The 70s is the Rock era with Progressive and Hard Rock
+occurring much more than any other genre. Singer/Songwriter is close to
+the Hard Rock. The 80s was Heavy Metal. The 90s is East Coast Hip Hop.
+Singer/Songwriter genre boosted in the early 2000s.
 
 ```{r}
 df_final%>% filter(Genre_1 == "Hard Bop")%>% select(Genre_1,Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -164,8 +262,8 @@ df_final%>% filter(Genre_1 == "Hard Bop")%>% select(Genre_1,Album,Artist.Name, Y
 
 **Top Hard Bop**
 
-Giant Steps by John Coltrane	1960, Score 4.10
-Moanin' by Art Blakey and The Jazz Messengers	1959, Score 4.04
+Giant Steps by John Coltrane 1960, Score 4.10 Moanin' by Art Blakey and
+The Jazz Messengers 1959, Score 4.04
 
 ```{r}
 df_final%>% filter(Genre_1 == "Progressive Rock"|Genre_1 == "Hard Rock")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -173,14 +271,14 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|Genre_1 == "Hard Rock")%>% sele
 
 **Top Progressive Rock Albums**
 
-In the Court of the Crimson King by King Crimson, Released 1969, Score 4.30
-Wish You Were Here by Pink Floyd, Released 1975, Score 4.29
+In the Court of the Crimson King by King Crimson, Released 1969, Score
+4.30 Wish You Were Here by Pink Floyd, Released 1975, Score 4.29
 
 **Top Hard Rock Album**
 
-Led Zeppelin [IV] by Led Zeppelin	1971	4.10
+Led Zeppelin [IV] by Led Zeppelin 1971 4.10
 
-Who's Next by The Who	1971	3.96
+Who's Next by The Who 1971 3.96
 
 ```{r}
 df_final%>% filter(Genre_1 == "Singer/Songwriter")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -188,8 +286,8 @@ df_final%>% filter(Genre_1 == "Singer/Songwriter")%>% select(Album,Artist.Name, 
 
 Top Singer/Songwriter Albums
 
-Blood on the Tracks	Bob Dylan	1975	4.16
-Either / Or Elliott Smith	1997	4.10
+Blood on the Tracks Bob Dylan 1975 4.16 Either / Or Elliott Smith 1997
+4.10
 
 ```{r}
 df_final%>% filter(Genre_1 == "Heavy Metal")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -197,10 +295,9 @@ df_final%>% filter(Genre_1 == "Heavy Metal")%>% select(Album,Artist.Name, Year,A
 
 **Top Heavy Metal Albums**
 
-Paranoid	Black Sabbath	1970	4.19
-Master of Reality	Black Sabbath	1971	4.12
-Black Sabbath	Black Sabbath	1970	4.06
-Painkiller Judas Priest	1990	4.00
+Paranoid Black Sabbath 1970 4.19 Master of Reality Black Sabbath 1971
+4.12 Black Sabbath Black Sabbath 1970 4.06 Painkiller Judas Priest 1990
+4.00
 
 ```{r}
 df_final%>% filter(Genre_1 == "East Coast Hip Hop")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -208,8 +305,8 @@ df_final%>% filter(Genre_1 == "East Coast Hip Hop")%>% select(Album,Artist.Name,
 
 **Top East Coast Hip Hop Albums**
 
-Illmatic	Nas	1994	4.20
-Enter the Wu-Tang (36 Chambers) Wu-Tang Clan	1993	4.19
+Illmatic Nas 1994 4.20 Enter the Wu-Tang (36 Chambers) Wu-Tang Clan 1993
+4.19
 
 ```{r}
 df_final %>% group_by(Artist.Name) %>% summarize(
@@ -219,25 +316,25 @@ df_final %>% group_by(Artist.Name) %>% summarize(
 
 Top Artists
 
-Mingus	4.34
-The Velvet Underground & Nico 4.23	
-Wu-Tang Clan	4.19
-Slint	4.15
-Godspeed You Black Emperor! 4.145
-Television 4.13
-DJ Shadow 4.11	
-Genius/GZA	4.11
-Milton Nascimento & Lô Borges	4.10
-The Zombies 4.08
+Mingus 4.34 The Velvet Underground & Nico 4.23\
+Wu-Tang Clan 4.19 Slint 4.15 Godspeed You Black Emperor! 4.145
+Television 4.13 DJ Shadow 4.11\
+Genius/GZA 4.11 Milton Nascimento & Lô Borges 4.10 The Zombies 4.08
 
--What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
+-What is the relationship between score and other variables, such as
+genre, descriptors, and artist? **Jasper**
 
-By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
-
-
-
+By answering this question we will be able to have a better idea of how
+albums are scored and what the stronger criterion are that affect scores
+for each album. First we will look for the unique values of genres,
+descriptors and artists to identify how many of each category we have.
+Once that is accomplished, we will be using the dplyr library and
+grouping the data by genre to graph it with the ggplot library. Using
+these graphs we will be able to see how different categories affect
+score.
 
 # First: Identify Question
+
 # Question: What is the relationship between score and other variables, such as genre, descriptors, and artist?
 
 ### Find the Top 10 Most Common Genres, Descriptors, and Artists
@@ -249,7 +346,9 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-- Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top 10 most common Genres.
+-   Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard
+    Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative
+    Rock, and Progressive Metal are the top 10 most common Genres.
 
 ```{r}
 ## Descriptor
@@ -258,7 +357,9 @@ df_final %>% group_by(Desc_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-- Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top 10 most common Descriptors.
+-   Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female
+    Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top
+    10 most common Descriptors.
 
 ```{r}
 ## Artist
@@ -267,11 +368,9 @@ df_final %>% group_by(Artist.Name)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-- Various Artists, Miles Davis, John Coltrane, Tom Waits, John Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock, Pharoah Sanders, and The Fall
-
-
-
-
+-   Various Artists, Miles Davis, John Coltrane, Tom Waits, John
+    Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock,
+    Pharoah Sanders, and The Fall
 
 ### Average Score of the Top 10 Most Common Genres, Descriptors, and Artists
 
@@ -280,7 +379,7 @@ df_final %>% group_by(Artist.Name)%>% summarise(
 mean(df_final$Average.Rating)
 ```
 
-- The average score for all albums in the list is 3.771304.
+-   The average score for all albums in the list is 3.771304.
 
 ```{r}
 ## Average score of Top 10 Genres
@@ -289,8 +388,8 @@ df_final_genres <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_genres$Average.Rating)
 ```
 
-- The average score for albums with their primary genre in the top 10 most common genre is 3.775546.
-
+-   The average score for albums with their primary genre in the top 10
+    most common genre is 3.775546.
 
 ```{r}
 ## Average score of Top 10 Descriptors
@@ -299,8 +398,8 @@ df_final_descriptors <- df_final[df_final$Desc_1==c("male vocals", "instrumental
 mean(df_final_descriptors$Average.Rating)
 ```
 
-- The average score for albums with their primary descriptor in the top 10 most common descriptors is 3.771124
-
+-   The average score for albums with their primary descriptor in the
+    top 10 most common descriptors is 3.771124
 
 ```{r}
 ## Average score of Top 10 Artists
@@ -310,8 +409,8 @@ df_final_artists <- df_final[df_final$Artist.Name=="Various Artists" |  df_final
 mean(df_final_artists$Average.Rating)
 ```
 
-- The average score for albums with their artists in the top 10 most common artists is 3.855435.
-
+-   The average score for albums with their artists in the top 10 most
+    common artists is 3.855435.
 
 ```{r}
 ## Average Score of all Top 10's
@@ -325,11 +424,8 @@ df_final_top10s <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_top10s$Average.Rating)
 ```
 
-- The average score for an album with any of the previous top 10 values included in the album is 3.7976607.
-
-
-
-
+-   The average score for an album with any of the previous top 10
+    values included in the album is 3.7976607.
 
 ### Average Score of !Top 10 most common genres, descriptors, artists
 
@@ -340,8 +436,8 @@ df_final_genres2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_genres2$Average.Rating)
 ```
 
-- The average score when the top 10 most common primary genres are removed is 3.771201.
-
+-   The average score when the top 10 most common primary genres are
+    removed is 3.771201.
 
 ```{r}
 ## Average score without top 10 most common Descriptors
@@ -350,8 +446,8 @@ df_final_descriptors2 <- df_final[!df_final$Desc_1==c("male vocals", "instrument
 mean(df_final_descriptors2$Average.Rating)
 ```
 
-- The average score when the top 10 most common primary descriptors are removed is 3.771311
-
+-   The average score when the top 10 most common primary descriptors
+    are removed is 3.771311
 
 ```{r}
 ## Average score without top 10 most common Artists
@@ -362,8 +458,8 @@ df_final_artists2 <- df_final[!df_final$Artist.Name=="Various Artists" &  !df_fi
 mean(df_final_artists2$Average.Rating)
 ```
 
-- The average score when the top 10 most common artists are removed is 3.768916.
-
+-   The average score when the top 10 most common artists are removed is
+    3.768916.
 
 ```{r}
 ## Average score without all top 10's
@@ -378,12 +474,11 @@ df_final_top10s2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_top10s2$Average.Rating)
 ```
 
-- The average score when the top 10 most common artists, genres, and descriptors are removed is 3.768879.
-
-
-
+-   The average score when the top 10 most common artists, genres, and
+    descriptors are removed is 3.768879.
 
 ### Correlation matrix to find what is most correlated with score
+
 ```{r}
 dummydf <- df_final
 
@@ -399,4 +494,8 @@ results <- cor(dummydf2)
 round(results,2)
 ```
 
-- Using our correlation matrix we can see that Number.of.Reviews is our strongest predictor of Average Rating with Number.of.Ratings close behind. If we were making a model to predict the average rating for an album we would include the variables: Number.of.Reviews, Number.of.Ratings, and Year.
+-   Using our correlation matrix we can see that Number.of.Reviews is
+    our strongest predictor of Average Rating with Number.of.Ratings
+    close behind. If we were making a model to predict the average
+    rating for an album we would include the variables:
+    Number.of.Reviews, Number.of.Ratings, and Year.
