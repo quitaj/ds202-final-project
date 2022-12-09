@@ -124,18 +124,15 @@ album? **Quita**
 
 ```{r}
 library(ggplot2)
-ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) 
+ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25)
 ```
 
-<<<<<<< HEAD
 ```{r}
 df_final%>%group_by(Year)%>% summarise(
   Average.Score =mean(Average.Rating)
 )%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-=======
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 -   What are the genres that dominated each decade?
 
 ```{r}
@@ -149,10 +146,10 @@ df_final%>%group_by(Year)%>% summarise(
 
 ```
 
-<<<<<<< HEAD
--What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website. **Soren**
-=======
-# Question 2: Who are the most well-known artists on this website, and does that correlate with high scores?
+-What is the relationship between the number of reviews/ratings and the
+artist? This helps determine the relative popularity of artists on this
+website. **Soren** \# Question 2: Who are the most well-known artists on
+this website, and does that correlate with high scores?
 
 Answering this question will involve determining the average number of
 ratings/reviews per artist. This can be accomplished using mutate
@@ -164,7 +161,6 @@ providing a score from 1-5. This is not a reflection of an artist's
 popularity outside the context of this website, as this is a website for
 dedicated fans of music, who tend to have different tastes than the
 general public.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 The average number of ratings and reviews per artist from each of their
 appearances on this list is already determined by the data processing
@@ -279,12 +275,8 @@ df_final%>% filter(Genre_1 == "Hard Bop")%>% select(Genre_1,Album,Artist.Name, Y
 
 **Top Hard Bop**
 
-<<<<<<< HEAD
-Giant Steps by John Coltrane 1960, Score 4.10 Moanin' by Art Blakey and The Jazz Messengers 1959, Score 4.04
-=======
 Giant Steps by John Coltrane 1960, Score 4.10 Moanin' by Art Blakey and
 The Jazz Messengers 1959, Score 4.04
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 df_final%>% filter(Genre_1 == "Progressive Rock"|Genre_1 == "Hard Rock")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -292,12 +284,8 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|Genre_1 == "Hard Rock")%>% sele
 
 **Top Progressive Rock Albums**
 
-<<<<<<< HEAD
-In the Court of the Crimson King by King Crimson, Released 1969, Score 4.30 Wish You Were Here by Pink Floyd, Released 1975, Score 4.29
-=======
 In the Court of the Crimson King by King Crimson, Released 1969, Score
 4.30 Wish You Were Here by Pink Floyd, Released 1975, Score 4.29
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 **Top Hard Rock Album**
 
@@ -311,12 +299,9 @@ df_final%>% filter(Genre_1 == "Singer/Songwriter")%>% select(Album,Artist.Name, 
 
 **Top Singer/Songwriter Albums**
 
-<<<<<<< HEAD
-Blood on the Tracks Bob Dylan 1975 4.16 Either / Or Elliott Smith 1997 4.10
-=======
-Blood on the Tracks Bob Dylan 1975 4.16 Either / Or Elliott Smith 1997
-4.10
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
+Blood on the Tracks Bob Dylan 1975 4.16
+
+Either / Or Elliott Smith 1997 4.10
 
 ```{r}
 df_final%>% filter(Genre_1 == "Heavy Metal")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -324,7 +309,6 @@ df_final%>% filter(Genre_1 == "Heavy Metal")%>% select(Album,Artist.Name, Year,A
 
 **Top Heavy Metal Albums**
 
-<<<<<<< HEAD
 Paranoid Black Sabbath 1970 4.19
 
 Master of Reality Black Sabbath 1971 4.12
@@ -332,11 +316,6 @@ Master of Reality Black Sabbath 1971 4.12
 Black Sabbath Black Sabbath 1970 4.06
 
 Painkiller Judas Priest 1990 4.00
-=======
-Paranoid Black Sabbath 1970 4.19 Master of Reality Black Sabbath 1971
-4.12 Black Sabbath Black Sabbath 1970 4.06 Painkiller Judas Priest 1990
-4.00
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 df_final%>% filter(Genre_1 == "East Coast Hip Hop")%>% select(Album,Artist.Name, Year,Average.Rating)%>% arrange(desc(Average.Rating))
@@ -344,13 +323,9 @@ df_final%>% filter(Genre_1 == "East Coast Hip Hop")%>% select(Album,Artist.Name,
 
 **Top East Coast Hip Hop Albums**
 
-<<<<<<< HEAD
 Illmatic Nas 1994 4.20
 
 Enter the Wu-Tang (36 Chambers) Wu-Tang Clan 1993 4.19
-=======
-Illmatic Nas 1994 4.20 Enter the Wu-Tang (36 Chambers) Wu-Tang Clan 1993
-4.19
 
 ```{r}
 df_final %>% group_by(Artist.Name) %>% summarize(
@@ -376,7 +351,6 @@ Once that is accomplished, we will be using the dplyr library and
 grouping the data by genre to graph it with the ggplot library. Using
 these graphs we will be able to see how different categories affect
 score.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 # First: Identify Question
 
@@ -391,13 +365,9 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-<<<<<<< HEAD
--   Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top 10 most common Genres.
-=======
 -   Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard
     Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative
     Rock, and Progressive Metal are the top 10 most common Genres.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Descriptor
@@ -406,13 +376,9 @@ df_final %>% group_by(Desc_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-<<<<<<< HEAD
--   Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top 10 most common Descriptors.
-=======
 -   Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female
     Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top
     10 most common Descriptors.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Artist
@@ -421,13 +387,9 @@ df_final %>% group_by(Artist.Name)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-<<<<<<< HEAD
--   Various Artists, Miles Davis, John Coltrane, Tom Waits, John Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock, Pharoah Sanders, and The Fall
-=======
 -   Various Artists, Miles Davis, John Coltrane, Tom Waits, John
     Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock,
     Pharoah Sanders, and The Fall
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ### Average Score of the Top 10 Most Common Genres, Descriptors, and Artists
 
@@ -445,12 +407,8 @@ df_final_genres <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_genres$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score for albums with their primary genre in the top 10 most common genre is 3.775546.
-=======
 -   The average score for albums with their primary genre in the top 10
     most common genre is 3.775546.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average score of Top 10 Descriptors
@@ -459,12 +417,8 @@ df_final_descriptors <- df_final[df_final$Desc_1==c("male vocals", "instrumental
 mean(df_final_descriptors$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score for albums with their primary descriptor in the top 10 most common descriptors is 3.771124
-=======
 -   The average score for albums with their primary descriptor in the
     top 10 most common descriptors is 3.771124
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average score of Top 10 Artists
@@ -474,12 +428,8 @@ df_final_artists <- df_final[df_final$Artist.Name=="Various Artists" |  df_final
 mean(df_final_artists$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score for albums with their artists in the top 10 most common artists is 3.855435.
-=======
 -   The average score for albums with their artists in the top 10 most
     common artists is 3.855435.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average Score of all Top 10's
@@ -493,12 +443,8 @@ df_final_top10s <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_top10s$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score for an album with any of the previous top 10 values included in the album is 3.7976607.
-=======
 -   The average score for an album with any of the previous top 10
     values included in the album is 3.7976607.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ### Average Score of !Top 10 most common genres, descriptors, artists
 
@@ -509,12 +455,8 @@ df_final_genres2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_genres2$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score when the top 10 most common primary genres are removed is 3.771201.
-=======
 -   The average score when the top 10 most common primary genres are
     removed is 3.771201.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average score without top 10 most common Descriptors
@@ -523,12 +465,8 @@ df_final_descriptors2 <- df_final[!df_final$Desc_1==c("male vocals", "instrument
 mean(df_final_descriptors2$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score when the top 10 most common primary descriptors are removed is 3.771311
-=======
 -   The average score when the top 10 most common primary descriptors
     are removed is 3.771311
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average score without top 10 most common Artists
@@ -539,12 +477,8 @@ df_final_artists2 <- df_final[!df_final$Artist.Name=="Various Artists" &  !df_fi
 mean(df_final_artists2$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score when the top 10 most common artists are removed is 3.768916.
-=======
 -   The average score when the top 10 most common artists are removed is
     3.768916.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ```{r}
 ## Average score without all top 10's
@@ -559,12 +493,8 @@ df_final_top10s2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_top10s2$Average.Rating)
 ```
 
-<<<<<<< HEAD
--   The average score when the top 10 most common artists, genres, and descriptors are removed is 3.768879.
-=======
 -   The average score when the top 10 most common artists, genres, and
     descriptors are removed is 3.768879.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
 
 ### Correlation matrix to find what is most correlated with score
 
@@ -583,12 +513,8 @@ results <- cor(dummydf2)
 round(results,2)
 ```
 
-<<<<<<< HEAD
--   Using our correlation matrix we can see that Number.of.Reviews is our strongest predictor of Average Rating with Number.of.Ratings close behind. If we were making a model to predict the average rating for an album we would include the variables: Number.of.Reviews, Number.of.Ratings, and Year.
-=======
 -   Using our correlation matrix we can see that Number.of.Reviews is
     our strongest predictor of Average Rating with Number.of.Ratings
     close behind. If we were making a model to predict the average
     rating for an album we would include the variables:
     Number.of.Reviews, Number.of.Ratings, and Year.
->>>>>>> 2dc488d6e6fd63c55d6b83a63e0437b3f893a282
