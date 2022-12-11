@@ -130,7 +130,8 @@ album? **Quita**
 
 ```{r}
 library(ggplot2)
-ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25)
+ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) + theme(axis.text.x = element_text(angle = 90, size = 10)) +theme(legend.position="none")
+```
 ```
 
 ```{r}
