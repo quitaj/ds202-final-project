@@ -141,6 +141,9 @@ df_final%>%group_by(Year)%>% summarise(
 )%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
+This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. 
+
+
 ```{r}
 df_final%>% filter(
   !(Month=="")) %>%group_by(Month)%>%summarise(
@@ -148,6 +151,9 @@ df_final%>% filter(
   Year = Year
   )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Month,y=Average.Score))+geom_point()
 ```
+This graph looks at the average score of albums by the month they were released it. Music is sometimes seasonal so uing this graph, I might be able to spot potential seasonal trends that may have occured with the Top 5000 Albums. When looking at the graph, it shows that December is the month with the highest rated albums where as May is the month with the lowest rated albums. I would have assumed the complete oppisite since May is right before the summer and that is often the start of festival season but this graph tells me somethind different.
+
+
 
 ```{r}
 df_final%>% filter(
@@ -156,13 +162,11 @@ df_final%>% filter(
   )%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()
 ```
 
-```{r}
-df_final%>% filter(
-  !(Month==""),!(Day==""))%>% group_by(Day)%>%summarise(
-  Average.Score = mean(Average.Rating),
-  Month = Month
-  )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()+facet_wrap(~Month)
-```
+This graph shows the realtionhip between the day of realease and the album score. There is not much pattern to this graph but it appears that albums realeased during the month are more highly rated. 
+
+
+Comclusion: 
+Overall, I would say that there is a pattern of when the album is realeased to the score it gets. I cannot make any further conclusions since I do not know more about the audience that is rating the album and did not account for other facors like genre and artist. 
 
 
 
