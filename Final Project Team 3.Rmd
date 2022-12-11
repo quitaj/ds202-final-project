@@ -133,6 +133,7 @@ library(ggplot2)
 ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) + theme(axis.text.x = element_text(angle = 90, size = 10)) +theme(legend.position="none")
 ```
 ```
+This graph shows the average score of each album by the year it was realeased and then colered it by the year so I to better visuaize it.  By doing this, I hoped to figure out which years has the best or worst scored albums. Most of the scores sit between 3.6 and 4. When looking at the graph, I see that the lowest rated album was released in 2017 whereas the best rated album was realeased in 1963. It is important to remember that these are the top rated albums on the site overall, so the ratings are not terrible but it looks like as the years increase, you see the cluster of rating moving more towards the lower end of the septrum. 
 
 ```{r}
 df_final%>%group_by(Year)%>% summarise(
