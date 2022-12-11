@@ -162,18 +162,8 @@ df_final%>% filter(
   )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()+facet_wrap(~Month)
 ```
 
--   What are the genres that dominated each decade?
-
-```{r}
 
 
-```
-
--Artist that dominated the genres?
-
-```{r}
-
-```
 
 -What is the relationship between the number of reviews/ratings and the
 artist? This helps determine the relative popularity of artists on this
