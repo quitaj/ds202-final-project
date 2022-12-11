@@ -141,7 +141,7 @@ df_final%>%group_by(Year)%>% summarise(
 )%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. 
+This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. There is an outlier in 1954 but I am choosing to ignore that because the amount of albums was very limited for that year, there is a total of 6 albums released that year in the data set. 
 
 
 ```{r}
