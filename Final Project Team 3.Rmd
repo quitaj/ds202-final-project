@@ -118,16 +118,10 @@ In your write-up, make sure to refer to all of the figures you create. You can i
 
 ```{r scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
-mtcars %>% 
-  ggplot(aes(x = wt, y = mpg)) + 
-  geom_point()
 ```
 
 ```{r 2nd scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
-mtcars %>% 
-  ggplot(aes(x = wt, y = mpg)) + 
-  geom_point()
 ```
 
 Additionally, you can also refer to different sections in your writeup by using anchors (links) to section headers. Here, we are referring to subsection [Results 3]. The code for that is `[Results 3]`.
@@ -137,14 +131,19 @@ Additionally, you can also refer to different sections in your writeup by using 
 -What is the relationship between the release date and the score of the album? **Quita**
 
 ```{r}
-ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25)
+ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) + theme(axis.text.x = element_text(angle = 90, size = 10)) +theme(legend.position="none")
 ```
+```
+This graph shows the average score of each album by the year it was realeased and then colered it by the year so I to better visuaize it.  By doing this, I hoped to figure out which years has the best or worst scored albums. Most of the scores sit between 3.6 and 4. When looking at the graph, I see that the lowest rated album was released in 2017 whereas the best rated album was realeased in 1963. It is important to remember that these are the top rated albums on the site overall, so the ratings are not terrible but it looks like as the years increase, you see the cluster of rating moving more towards the lower end of the septrum. 
 
 ```{r}
 df_final%>%group_by(Year)%>% summarise(
   Average.Score =mean(Average.Rating)
 )%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
+
+This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. There is an outlier in 1954 but I am choosing to ignore that because the amount of albums was very limited for that year, there is a total of 6 albums released that year in the data set. 
+
 
 ```{r}
 df_final%>% filter(
@@ -153,6 +152,9 @@ df_final%>% filter(
   Year = Year
   )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Month,y=Average.Score))+geom_point()
 ```
+This graph looks at the average score of albums by the month they were released it. Music is sometimes seasonal so uing this graph, I might be able to spot potential seasonal trends that may have occured with the Top 5000 Albums. When looking at the graph, it shows that December is the month with the highest rated albums where as May is the month with the lowest rated albums. I would have assumed the complete oppisite since May is right before the summer and that is often the start of festival season but this graph tells me somethind different.
+
+
 
 ```{r}
 df_final%>% filter(
@@ -161,26 +163,14 @@ df_final%>% filter(
   )%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()
 ```
 
-```{r}
-df_final%>% filter(
-  !(Month==""),!(Day==""))%>% group_by(Day)%>%summarise(
-  Average.Score = mean(Average.Rating),
-  Month = Month
-  )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()+facet_wrap(~Month)
-```
-
--   What are the genres that dominated each decade?
-
-```{r}
+This graph shows the realtionhip between the day of realease and the album score. There is not much pattern to this graph but it appears that albums realeased during the month are more highly rated. 
 
 
-```
+Comclusion: 
+Overall, I would say that there is a pattern of when the album is realeased to the score it gets. I cannot make any further conclusions since I do not know more about the audience that is rating the album and did not account for other facors like genre and artist. 
 
--Artist that dominated the genres?
 
-```{r}
 
-```
 
 ## Results 2 {data-link="Results 2"}
 
@@ -228,7 +218,6 @@ df_sorted_reviews %>%
   geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1))
 ```
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ## Results 3 {data-link="Results 3"}
 
@@ -304,7 +293,6 @@ Looking at the count for the genres over time, it can be seen that from the begi
 
 To answer the question: How do Genre's scores change over time? From the plot, the most popular genre's scores appear to oscillate over the years, with a fairly consistent average around 3.8 for all genres.
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ## Results 4 {data-link="Results 3"}
 
