@@ -1,94 +1,107 @@
 ---
-editor_options: 
-  markdown: 
-    wrap: 72
+title: "The Numbers behind Popular Music"
+output: 
+  github_document:
+    number_section: FALSE
 ---
 
-## Libraries and loading data
+# The Numbers behind Popular Music {.unnumbered}
 
-```{r}
+Authors: Jasper Jansen, Jolie Jacobus, Soren Wagstrom, Quita Jackson
+
+## Abstract (TL;DR) {.unnumbered}
+
+Our team investigated the factors behind popular music. We used a dataset detailing the top 5000 albums of all time. This data comes from the website rateyourmusic.com, however we found this dataset on Kaggle.com. Our team was interested in this topic as music fans, and we wanted to explore the trends in popular music over the years. Our main findings were that most higher rated albums were released before 1980. The most rated and reviewed artists on the list were Radiohead, The Velvet Underground, Nirvana, and Pink Floyd. There was no significant trend in ratings of genres over time. Of the most common genres, the highest rated genre was Film Score, and the lowest rated genre was Hard Rock. When the album was released had a negative correlation with the rating for the album, and the number of review and ratings had a positive correlation with the rating of the album.
+
+# Intro/Background/Motivation
+
+Our team investigated the factors behind popular music. We used a dataset detailing the top 5000 albums of all time. This data comes from the website rateyourmusic.com, however we found this dataset on Kaggle.com. This project is relevant because by analyzing trends in popular music, this project could help artists predict future trends in the music industry or help them to decide when to release their music to get the best results.
+
+In section [Results 1] we show the relationship between the album release date and the rating of the album. In section [Results 2], popularity of the artist is considered with the ratings of the albums. In section [Results 3], trends in the ratings of genres is explored over time. In section [Results 4], the relationship between score and the album's genre, descriptors, and artist is investigated.
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, warning = TRUE)
+
+
+knit_hooks$set( fig.cap = function(before, options, envir) {
+  if ( before ) {
+    chr <- sprintf("<p><small><strong><a name='fig:%s' value = %d>Figure %d</a></strong>: %s</small></p>", options$label, options$fig.num, options$fig.num, options$fig.cap)
+    chr <- sprintf("<p><small><strong><a name='fig:%s'>%s</a></strong>: %s</small></p>", options$label, options$label,  options$fig.cap)
+    
+    return(chr)
+  }
+})
+
+
+chunkref <- local({
+  function(chunklabel) {
+    sprintf('[%s](#%s)', chunklabel, paste0("fig:",chunklabel) )
+  }  
+})
+
+library(ggplot2)
+library(dplyr)
 library(tidyverse)
 library(stringr)
-df = read.csv("https://raw.githubusercontent.com/wagstrom/ds-202-final-project/main/rym_top_5000_all_time.csv")
-```
-
-In this chunk we read in our data from our working repository.
-
-## Converting to numeric
-
-```{r}
-df$Number.of.Ratings = as.numeric(gsub(",", "", df$Number.of.Ratings))
-df$Ranking = as.numeric(df$Ranking)
-df$Average.Rating = as.numeric(df$Average.Rating)
-df$Number.of.Reviews = as.numeric(df$Number.of.Reviews)
-df2 = df
-```
-
-In this chunk we set our ratings, number of ratings, rankings, and
-number of reviews as numerical values instead of string values.
-
-## Converting comma-separated strings into separate columns
-
-```{r}
-df2[c('Genre_1', 'Genre_2', 'Genre_3', 'Genre_4', 'Genre_5')] <- str_split_fixed(df2$Genres, ', ', 5)
-df2[c('Desc_1', 'Desc_2', 'Desc_3', 'Desc_4', 'Desc_5', 'Desc_6', 'Desc_7', 'Desc_8',
-     'Desc_9', 'Desc_10')] <- str_split_fixed(df2$Descriptors, ', ', 10)
-sum(df2$Desc_10 != "")
-df3 = df2
-```
-
-In this chunk we are splitting our genres and descriptors into different
-columns that makes the album values less unique.
-
-## Add column for average score, average reviews, average ratings, and number of appearances per artist
-
-```{r}
 library(lubridate)
-df3 = df3 %>%
-  group_by(Artist.Name) %>%
-  mutate(Artist.Average.Score = mean(Average.Rating),
-         Artist.Average.Reviews = mean(Number.of.Reviews),
-         Artist.Average.Ratings = mean(Number.of.Ratings),
-         Artist.Frequency = nrow(as.data.frame(Artist.Name))
-         )
-
-df_final = df3
 ```
 
-Dealing with Dates
+# Quick Data Summary
+
+Our dataset is the list of the top 5000 rated albums on the website rateyourmusic.com. The dataset includes the ranking, album title, artist, release date, genre(s), descriptors, average rating, number of ratings, number of reviews
+
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Variable                | Description                                                                                                                                      | Summary Statistics      |
++=========================+==================================================================================================================================================+=========================+
+| Ranking                 | The ranking out of 5000 for the album                                                                                                            | Integer type            |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 1-5000           |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Album                   | The Album Name                                                                                                                                   | Character type          |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Name             | The artist of the album's name                                                                                                                   | Character type          |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Average.Rating          | The average rating of the album                                                                                                                  | Numerical type          |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 3.52-4.34        |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Number.of.Ratings       | The number of ratings the album has                                                                                                              | Integer type            |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 260-70382        |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Number.of.Reviews       | the number of reviews the album has. A review includes a text review, whereas with a rating a user only inputs a numerical rating for the album. | Integer type            |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 0-1549           |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Genre_1 - Genre_5       | The genre the album is classified as. Each album could have up to 5 genre classifications.                                                       | Character type          |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Desc_1 - Desc_10        | The descriptor the album is classified as. Each album could have up to 10 descriptors.                                                           | Character type          |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Score    | The average rating for all of an artist's albums on the list                                                                                     | Numerical type          |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 3.52-4.34        |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Reviews  | The average number of reviews an artist's album has.                                                                                             | Numerical type          |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 0-929            |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Ratings  | The average number of ratings an artist's album has.                                                                                             | Numerical type          |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 260-46438        |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Frequency        | How many times an artist's album appears in the dataset.                                                                                         | Integer Type            |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Range: 1-25             |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Year, Month, Day        | The year, month and day the album was released of the album.                                                                                     | Integer/Character Type  |
+|                         |                                                                                                                                                  |                         |
+|                         |                                                                                                                                                  | Year Range: 1947 - 2021 |
++-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
 
 ```{r}
-Year_useful = str_sub(df_final$Release.Date,-2,-1)
+df_final <- read.csv("df_final.csv")
 
-library(lubridate)
-Year_start = NULL
-for(i in 1:5000){
-  if(Year_useful[i] <  22){
-    Year_start[i] = 20
-    }else{
-    Year_start[i] = 19
-  }
-}
-
-year = data.frame(Year_start, Year_useful)
-
-df_final$Year = paste(year$Year_start, year$Year_useful)
-df_final$Year = gsub(" ", "", df_final$Year)
-
-Month = gsub("[^a-zA-Z]", "",df_final$Release.Date )
-df_final$Month = Month
-
-Day = parse_number(str_sub(df_final$Release.Date,,2))
-df_final$Day=factor(Day)
-```
-
-In this chunk we are adding columns to find the averages of scores,
-reviews, number of ratings, and number of appearances for each artist.
-We do this so we can compare the individual values easier.
-
-## Summaries
-
-```{r}
 nrow(unique(as.data.frame(df_final$Album)))
   #Some albums have the same names
 nrow(unique(as.data.frame(df_final$Artist.Name)))
@@ -96,40 +109,34 @@ nrow(unique(as.data.frame(df_final$Artist.Name)))
 nrow(unique(as.data.frame(df_final$Genre_1)))
   #453 unique primary genres
 summary(df_final)
+str(df_final)
 ```
 
-In this chunk we are exploring the data to see how many unique albums,
-artists, and genres in the data. We also ran a summary of the dataframe
-so we could view it easier.
+# Results
 
-Our project idea is as follows:
+In your write-up, make sure to refer to all of the figures you create. You can include a hyperlink to the [scatterplot](#fig:scatterplot) by using the name of the code chunk (make sure, to give each code chunk a different name). In your markdown document you can create this link either by calling the function `chunkref` with the name of the code chunk in quotes, i.e. `r chunkref("scatterplot")` or by using the markdown expression `[scatterplot](#fig:scatterplot)`. Similarly, we can refer to the `r chunkref("2nd scatterplot")`. Note that the figure captions appear above the figures - this saves us from having to scroll up after following the link.
 
-Our dataset is the list of the top 5000 rated albums on the website
-rateyourmusic.com. The dataset includes the ranking, album title,
-artist, release date, genre(s), descriptors, average rating, number of
-ratings, number of reviews. We have several questions we'd like to
-answer through statistical analysis and visualization, some of which are
-listed below:
+```{r scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
--What is the relationship between the release date and the score of the
-album?
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+  geom_point()
+```
 
--What is the relationship between the number of reviews/ratings and the
-artist? This helps determine the relative popularity of artists on this
-website.
+```{r 2nd scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
--What is the relationship between score and other variables, such as
-genre, descriptors, and artist?
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+  geom_point()
+```
 
--How do scores for genres change over time?
+Additionally, you can also refer to different sections in your writeup by using anchors (links) to section headers. Here, we are referring to subsection [Results 3]. The code for that is `[Results 3]`.
 
-**Outline of Exploration:**
+## Results 1 {data-link="Results 1"}
 
--What is the relationship between the release date and the score of the
-album? **Quita**
+-What is the relationship between the release date and the score of the album? **Quita**
 
 ```{r}
-library(ggplot2)
 ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25)
 ```
 
@@ -175,38 +182,17 @@ df_final%>% filter(
 
 ```
 
--What is the relationship between the number of reviews/ratings and the
-artist? This helps determine the relative popularity of artists on this
-website.
+## Results 2 {data-link="Results 2"}
 
-**Soren** \# Question 2: Who are the most well-known artists on this
-website, and does that correlate with high scores?
+-What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website.
 
-Answering this question will involve determining the average number of
-ratings/reviews per artist. This can be accomplished using mutate
-statements to create two new columns, one for average number of ratings
-per artist, and one for average number of reviews per artist. The number
-of reviews per artist will be much lower than the number of ratings,
-because writing a review takes much more time and effort than simply
-providing a score from 1-5. This is not a reflection of an artist's
-popularity outside the context of this website, as this is a website for
-dedicated fans of music, who tend to have different tastes than the
-general public.
+**Soren** \# Question 2: Who are the most well-known artists on this website, and does that correlate with high scores?
 
-The average number of ratings and reviews per artist from each of their
-appearances on this list is already determined by the data processing
-above, so the only step remaining for this question is to visualize and
-communicate the results.
+Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist's popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
 
-The plot below shows the top 10 artists by average number of ratings.
-Radiohead tops the list, followed by The Velvet Underground and Nirvana.
-These are all very popular mainstream artists, so there is no surprise
-here. They all have very high average scores as well, indicating that
-these artists are as beloved as they are famous. There are some less
-well-known artists on this list as well, such as Slint and Godspeed You,
-Black Emperor!, which may indicate that these artists are more popular
-among music enthusiast crowds like the RateYourMusic community than
-among the general public.
+The average number of ratings and reviews per artist from each of their appearances on this list is already determined by the data processing above, so the only step remaining for this question is to visualize and communicate the results.
+
+The plot below shows the top 10 artists by average number of ratings. Radiohead tops the list, followed by The Velvet Underground and Nirvana. These are all very popular mainstream artists, so there is no surprise here. They all have very high average scores as well, indicating that these artists are as beloved as they are famous. There are some less well-known artists on this list as well, such as Slint and Godspeed You, Black Emperor!, which may indicate that these artists are more popular among music enthusiast crowds like the RateYourMusic community than among the general public.
 
 ```{r}
 # Artist popularity by ratings
@@ -223,17 +209,9 @@ df_sorted_ratings %>%
   geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1)) 
 ```
 
-The next plot, shown below, includes the top 10 artists by average
-number of reviews. Again, The Velvet Underground and Nirvana are in the
-top 3, but Pink Floyd takes the third spot this time around, followed
-closely by Radiohead.
+The next plot, shown below, includes the top 10 artists by average number of reviews. Again, The Velvet Underground and Nirvana are in the top 3, but Pink Floyd takes the third spot this time around, followed closely by Radiohead.
 
-There are two outliers in the top 10 in terms of score here. Both Guns
-N' Roses and The Sex Pistols have a much lower average score than the
-others on this list. One conclusion that could be drawn from this
-statistic it that while these two artists are clearly very well known,
-they are not as widely beloved among music enthusiasts as others on this
-list, and their fame may somewhat overrate the quality of their music.
+There are two outliers in the top 10 in terms of score here. Both Guns N' Roses and The Sex Pistols have a much lower average score than the others on this list. One conclusion that could be drawn from this statistic it that while these two artists are clearly very well known, they are not as widely beloved among music enthusiasts as others on this list, and their fame may somewhat overrate the quality of their music.
 
 ```{r}
 # Artist popularity by reviews
@@ -252,15 +230,15 @@ df_sorted_reviews %>%
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-# Question: How do scores for genres change over time? 
+## Results 3 {data-link="Results 3"}
+
+# Question: How do scores for genres change over time?
 
 ```{r}
 length(unique(df_final$Genre_1))
 ```
 
-There are 435 unique genres in the dataset. This would be too much to
-cover in a plot, so we will focus on the genres that occur most on the
-list.
+There are 435 unique genres in the dataset. This would be too much to cover in a plot, so we will focus on the genres that occur most on the list.
 
 ```{r}
 df_final %>% group_by(Genre_1)%>% summarise(
@@ -269,9 +247,7 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
-Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock,
-Heavy Metal, and East Coast Hip Hop are the top seven genres the occur
-the most on the list.
+Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, and East Coast Hip Hop are the top seven genres the occur the most on the list.
 
 ```{r}
 df_final%>% filter(Genre_1 == "Progressive Rock"|
@@ -287,13 +263,7 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
               )%>% ggplot(aes(x = Year,y = Average.Score, group = Genre_1, color = Genre_1)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-Most genre's average scores over the years appear to be fairly
-consistent. Heavy Metal started out strong in 1970, but then suffered a
-steep decline by the end of the decade, plateauing around 3.75. Hard
-Rock had the lowest average score, and throughout the timeline barely
-broke 3.8 at its highest peak. Hard bop, Film Score, Singer/Songwriter
-and east coast hip hop seem to be oscillating around an average rating
-of 3.8.
+Most genre's average scores over the years appear to be fairly consistent. Heavy Metal started out strong in 1970, but then suffered a steep decline by the end of the decade, plateauing around 3.75. Hard Rock had the lowest average score, and throughout the timeline barely broke 3.8 at its highest peak. Hard bop, Film Score, Singer/Songwriter and east coast hip hop seem to be oscillating around an average rating of 3.8.
 
 ```{r}
 df_final %>% group_by(Genre_1)%>% 
@@ -315,10 +285,7 @@ df_final %>% group_by(Genre_1)%>%
   xlab("Genre")
 ```
 
-The average scores for each genre are very similar which makes sense as
-we are looking at the top 5000 albums so they all should have fairly
-high scores. Film Score had the highest average score with 3.81, and
-Hard Rock had the lowest average score at 3.75.
+The average scores for each genre are very similar which makes sense as we are looking at the top 5000 albums so they all should have fairly high scores. Film Score had the highest average score with 3.81, and Hard Rock had the lowest average score at 3.75.
 
 ```{r}
 df_final%>% filter(Genre_1 == "Progressive Rock"|
@@ -333,32 +300,17 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 )%>% ggplot(aes(x = Year,y = count, group = Genre_1, color = Genre_1)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-Looking at the count for the genres over time, it can be seen that from
-the beginning of the 50s to the end of the 60s Hard Bop Jazz was the
-dominating genre for music. The 70s is the Rock era with Progressive and
-Hard Rock occurring the most with the Singer/Songwriter genre close to
-the Hard Rock genre. The 80s had Heavy Metal as the genre that occurred
-the most. Finally, East Coast Hip Hop is the most occurring genre for
-the 90s. The Singer/Songwriter and Progressive rock genre came back a
-little in the early 2000s.
+Looking at the count for the genres over time, it can be seen that from the beginning of the 50s to the end of the 60s Hard Bop Jazz was the dominating genre for music. The 70s is the Rock era with Progressive and Hard Rock occurring the most with the Singer/Songwriter genre close to the Hard Rock genre. The 80s had Heavy Metal as the genre that occurred the most. Finally, East Coast Hip Hop is the most occurring genre for the 90s. The Singer/Songwriter and Progressive rock genre came back a little in the early 2000s.
 
-To answer the question: How do Genre's scores change over time? From the
-plot, the most popular genre's scores appear to oscillate over the
-years, with a fairly consistent average around 3.8 for all genres.
+To answer the question: How do Genre's scores change over time? From the plot, the most popular genre's scores appear to oscillate over the years, with a fairly consistent average around 3.8 for all genres.
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
--What is the relationship between score and other variables, such as
-genre, descriptors, and artist? **Jasper**
+## Results 4 {data-link="Results 3"}
 
-By answering this question we will be able to have a better idea of how
-albums are scored and what the stronger criterion are that affect scores
-for each album. First we will look for the unique values of genres,
-descriptors and artists to identify how many of each category we have.
-Once that is accomplished, we will be using the dplyr library and
-grouping the data by genre to graph it with the ggplot library. Using
-these graphs we will be able to see how different categories affect
-score.
+-What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
+
+By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
 
 # First: Identify Question
 
@@ -373,9 +325,7 @@ df_final %>% group_by(Genre_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
--   Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard
-    Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative
-    Rock, and Progressive Metal are the top 10 most common Genres.
+-   Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, East Coast Hip Hop, Video Game Music, Alternative Rock, and Progressive Metal are the top 10 most common Genres.
 
 ```{r}
 ## Descriptor
@@ -384,9 +334,7 @@ df_final %>% group_by(Desc_1)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
--   Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female
-    Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top
-    10 most common Descriptors.
+-   Male Vocals, Instrumental, Energetic, Melodic, Melancholic, Female Vocals, Atmostpheric, Psychedelic, Passionate, and Dark are the top 10 most common Descriptors.
 
 ```{r}
 ## Artist
@@ -395,9 +343,7 @@ df_final %>% group_by(Artist.Name)%>% summarise(
 )%>% arrange(desc(count))
 ```
 
--   Various Artists, Miles Davis, John Coltrane, Tom Waits, John
-    Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock,
-    Pharoah Sanders, and The Fall
+-   Various Artists, Miles Davis, John Coltrane, Tom Waits, John Williams, Bob Dylan, The Beatles, Ennio Morricone, Herbie Hancock, Pharoah Sanders, and The Fall
 
 ### Average Score of the Top 10 Most Common Genres, Descriptors, and Artists
 
@@ -415,8 +361,7 @@ df_final_genres <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_genres$Average.Rating)
 ```
 
--   The average score for albums with their primary genre in the top 10
-    most common genre is 3.775546.
+-   The average score for albums with their primary genre in the top 10 most common genre is 3.775546.
 
 ```{r}
 ## Average score of Top 10 Descriptors
@@ -425,8 +370,7 @@ df_final_descriptors <- df_final[df_final$Desc_1==c("male vocals", "instrumental
 mean(df_final_descriptors$Average.Rating)
 ```
 
--   The average score for albums with their primary descriptor in the
-    top 10 most common descriptors is 3.771124
+-   The average score for albums with their primary descriptor in the top 10 most common descriptors is 3.771124
 
 ```{r}
 ## Average score of Top 10 Artists
@@ -436,8 +380,7 @@ df_final_artists <- df_final[df_final$Artist.Name=="Various Artists" |  df_final
 mean(df_final_artists$Average.Rating)
 ```
 
--   The average score for albums with their artists in the top 10 most
-    common artists is 3.855435.
+-   The average score for albums with their artists in the top 10 most common artists is 3.855435.
 
 ```{r}
 ## Average Score of all Top 10's
@@ -451,8 +394,7 @@ df_final_top10s <- df_final[df_final$Genre_1==c("Progressive Rock", "Singer/Song
 mean(df_final_top10s$Average.Rating)
 ```
 
--   The average score for an album with any of the previous top 10
-    values included in the album is 3.7976607.
+-   The average score for an album with any of the previous top 10 values included in the album is 3.7976607.
 
 ### Average Score of !Top 10 most common genres, descriptors, artists
 
@@ -463,8 +405,7 @@ df_final_genres2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_genres2$Average.Rating)
 ```
 
--   The average score when the top 10 most common primary genres are
-    removed is 3.771201.
+-   The average score when the top 10 most common primary genres are removed is 3.771201.
 
 ```{r}
 ## Average score without top 10 most common Descriptors
@@ -473,8 +414,7 @@ df_final_descriptors2 <- df_final[!df_final$Desc_1==c("male vocals", "instrument
 mean(df_final_descriptors2$Average.Rating)
 ```
 
--   The average score when the top 10 most common primary descriptors
-    are removed is 3.771311
+-   The average score when the top 10 most common primary descriptors are removed is 3.771311
 
 ```{r}
 ## Average score without top 10 most common Artists
@@ -485,8 +425,7 @@ df_final_artists2 <- df_final[!df_final$Artist.Name=="Various Artists" &  !df_fi
 mean(df_final_artists2$Average.Rating)
 ```
 
--   The average score when the top 10 most common artists are removed is
-    3.768916.
+-   The average score when the top 10 most common artists are removed is 3.768916.
 
 ```{r}
 ## Average score without all top 10's
@@ -501,8 +440,7 @@ df_final_top10s2 <- df_final[!df_final$Genre_1==c("Progressive Rock", "Singer/So
 mean(df_final_top10s2$Average.Rating)
 ```
 
--   The average score when the top 10 most common artists, genres, and
-    descriptors are removed is 3.768879.
+-   The average score when the top 10 most common artists, genres, and descriptors are removed is 3.768879.
 
 ### Correlation matrix to find what is most correlated with score
 
@@ -521,8 +459,16 @@ results <- cor(dummydf2)
 round(results,2)
 ```
 
--   Using our correlation matrix we can see that Number.of.Reviews is
-    our strongest predictor of Average Rating with Number.of.Ratings
-    close behind. If we were making a model to predict the average
-    rating for an album we would include the variables:
-    Number.of.Reviews, Number.of.Ratings, and Year.
+-   Using our correlation matrix we can see that Number.of.Reviews is our strongest predictor of Average Rating with Number.of.Ratings close behind. If we were making a model to predict the average rating for an album we would include the variables: Number.of.Reviews, Number.of.Ratings, and Year.
+
+# Conclusions {data-link="Conclusions"}
+
+Give a quick summary of your work. Here is the place to be a bit critical and discuss potential limitations. Add a sentence on what else you would have liked to include in your data exploration if you had more time or more members in your team.
+
+## Data source {.unnumbered}
+
+Where does the data come from, who owns the data? Where are all the scripts that you need to clean the data?
+
+## References {.unnumbered}
+
+List all resources you used.
