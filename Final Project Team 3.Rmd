@@ -51,53 +51,53 @@ library(lubridate)
 
 Our dataset is the list of the top 5000 rated albums on the website rateyourmusic.com. The dataset includes the ranking, album title, artist, release date, genre(s), descriptors, average rating, number of ratings, number of reviews
 
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Variable                | Description                                                                                                                                      | Summary Statistics      |
-+=========================+==================================================================================================================================================+=========================+
-| Ranking                 | The ranking out of 5000 for the album                                                                                                            | Integer type            |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 1-5000           |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Album                   | The Album Name                                                                                                                                   | Character type          |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Artist.Name             | The artist of the album's name                                                                                                                   | Character type          |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Average.Rating          | The average rating of the album                                                                                                                  | Numerical type          |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 3.52-4.34        |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Number.of.Ratings       | The number of ratings the album has                                                                                                              | Integer type            |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 260-70382        |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Number.of.Reviews       | the number of reviews the album has. A review includes a text review, whereas with a rating a user only inputs a numerical rating for the album. | Integer type            |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 0-1549           |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Genre_1 - Genre_5       | The genre the album is classified as. Each album could have up to 5 genre classifications.                                                       | Character type          |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Desc_1 - Desc_10        | The descriptor the album is classified as. Each album could have up to 10 descriptors.                                                           | Character type          |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Artist.Average.Score    | The average rating for all of an artist's albums on the list                                                                                     | Numerical type          |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 3.52-4.34        |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Artist.Average.Reviews  | The average number of reviews an artist's album has.                                                                                             | Numerical type          |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 0-929            |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Artist.Average.Ratings  | The average number of ratings an artist's album has.                                                                                             | Numerical type          |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 260-46438        |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Artist.Frequency        | How many times an artist's album appears in the dataset.                                                                                         | Integer Type            |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Range: 1-25             |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
-| Year, Month, Day        | The year, month and day the album was released of the album.                                                                                     | Integer/Character Type  |
-|                         |                                                                                                                                                  |                         |
-|                         |                                                                                                                                                  | Year Range: 1947 - 2021 |
-+-------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Variable               | Description                                                                                                                                      | Summary Statistics      |
++========================+==================================================================================================================================================+=========================+
+| Ranking                | The ranking out of 5000 for the album                                                                                                            | Integer type            |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 1-5000           |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Album                  | The Album Name                                                                                                                                   | Character type          |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Name            | The artist of the album's name                                                                                                                   | Character type          |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Average.Rating         | The average rating of the album                                                                                                                  | Numerical type          |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 3.52-4.34        |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Number.of.Ratings      | The number of ratings the album has                                                                                                              | Integer type            |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 260-70382        |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Number.of.Reviews      | the number of reviews the album has. A review includes a text review, whereas with a rating a user only inputs a numerical rating for the album. | Integer type            |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 0-1549           |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Genre_1 - Genre_5      | The genre the album is classified as. Each album could have up to 5 genre classifications.                                                       | Character type          |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Desc_1 - Desc_10       | The descriptor the album is classified as. Each album could have up to 10 descriptors.                                                           | Character type          |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Score   | The average rating for all of an artist's albums on the list                                                                                     | Numerical type          |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 3.52-4.34        |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Reviews | The average number of reviews an artist's album has.                                                                                             | Numerical type          |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 0-929            |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Average.Ratings | The average number of ratings an artist's album has.                                                                                             | Numerical type          |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 260-46438        |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Artist.Frequency       | How many times an artist's album appears in the dataset.                                                                                         | Integer Type            |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Range: 1-25             |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
+| Year, Month, Day       | The year, month and day the album was released of the album.                                                                                     | Integer/Character Type  |
+|                        |                                                                                                                                                  |                         |
+|                        |                                                                                                                                                  | Year Range: 1947 - 2021 |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
 
 ```{r}
 df_final <- read.csv("df_final.csv")
@@ -118,10 +118,16 @@ In your write-up, make sure to refer to all of the figures you create. You can i
 
 ```{r scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+  geom_point()
 ```
 
 ```{r 2nd scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
 
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+  geom_point()
 ```
 
 Additionally, you can also refer to different sections in your writeup by using anchors (links) to section headers. Here, we are referring to subsection [Results 3]. The code for that is `[Results 3]`.
@@ -133,17 +139,16 @@ Additionally, you can also refer to different sections in your writeup by using 
 ```{r}
 ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) + theme(axis.text.x = element_text(angle = 90, size = 10)) +theme(legend.position="none")
 ```
-```
-This graph shows the average score of each album by the year it was realeased and then colered it by the year so I to better visuaize it.  By doing this, I hoped to figure out which years has the best or worst scored albums. Most of the scores sit between 3.6 and 4. When looking at the graph, I see that the lowest rated album was released in 2017 whereas the best rated album was realeased in 1963. It is important to remember that these are the top rated albums on the site overall, so the ratings are not terrible but it looks like as the years increase, you see the cluster of rating moving more towards the lower end of the septrum. 
+
+This graph shows the average score of each album by the year it was realeased and then colered it by the year so I to better visuaize it. By doing this, I hoped to figure out which years has the best or worst scored albums. Most of the scores sit between 3.6 and 4. When looking at the graph, I see that the lowest rated album was released in 2017 whereas the best rated album was realeased in 1963. It is important to remember that these are the top rated albums on the site overall, so the ratings are not terrible but it looks like as the years increase, you see the cluster of rating moving more towards the lower end of the septrum.
 
 ```{r}
-df_final%>%group_by(Year)%>% summarise(
+df_final %>% group_by(Year) %>% summarise(
   Average.Score =mean(Average.Rating)
-)%>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
+) %>% ggplot(aes(x=Year,y=Average.Score))+geom_point()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. There is an outlier in 1954 but I am choosing to ignore that because the amount of albums was very limited for that year, there is a total of 6 albums released that year in the data set. 
-
+This graph scores the average score that all albums recieved by the the year. My conclusion of a overall decresing score as the move from year to year is confirmed when looking at this graph.There is a huge increase in average score as you move towards the 70's but then it starts to decline shortly after. There is an outlier in 1954 but I am choosing to ignore that because the amount of albums was very limited for that year, there is a total of 6 albums released that year in the data set.
 
 ```{r}
 df_final%>% filter(
@@ -152,9 +157,8 @@ df_final%>% filter(
   Year = Year
   )%>%  mutate(Month = factor(Month, levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec")))%>%ggplot(aes(x=Month,y=Average.Score))+geom_point()
 ```
+
 This graph looks at the average score of albums by the month they were released it. Music is sometimes seasonal so uing this graph, I might be able to spot potential seasonal trends that may have occured with the Top 5000 Albums. When looking at the graph, it shows that December is the month with the highest rated albums where as May is the month with the lowest rated albums. I would have assumed the complete oppisite since May is right before the summer and that is often the start of festival season but this graph tells me somethind different.
-
-
 
 ```{r}
 df_final%>% filter(
@@ -163,14 +167,9 @@ df_final%>% filter(
   )%>%ggplot(aes(x=Day,y=Average.Score))+geom_point()
 ```
 
-This graph shows the realtionhip between the day of realease and the album score. There is not much pattern to this graph but it appears that albums realeased during the month are more highly rated. 
+This graph shows the realtionhip between the day of realease and the album score. There is not much pattern to this graph but it appears that albums realeased during the month are more highly rated.
 
-
-Comclusion: 
-Overall, I would say that there is a pattern of when the album is realeased to the score it gets. I cannot make any further conclusions since I do not know more about the audience that is rating the album and did not account for other facors like genre and artist. 
-
-
-
+Comclusion: Overall, I would say that there is a pattern of when the album is realeased to the score it gets. I cannot make any further conclusions since I do not know more about the audience that is rating the album and did not account for other facors like genre and artist.
 
 ## Results 2 {data-link="Results 2"}
 
@@ -189,14 +188,8 @@ The plot below shows the top 10 artists by average number of ratings. Radiohead 
 df_sorted_ratings = df_final[order(-df_final$Artist.Average.Ratings),]
 df_sorted_ratings = df_sorted_ratings[,c(3, 25, 27)]
 df_sorted_ratings = unique(df_sorted_ratings)[1:10,]
-df_sorted_ratings %>%
-  ggplot(aes(x = reorder(Artist.Name, Artist.Average.Ratings), 
-             y = Artist.Average.Ratings, fill = Artist.Name)) + 
-  geom_bar(stat="identity") + coord_flip() + 
-  theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) +
-  theme(legend.position="none") + 
-  labs(x = "Artist Name", y = "Number of Ratings") + 
-  geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1)) 
+##df_sorted_ratings %>% ggplot(aes(x = reorder(Artist.Name, Artist.Average.Ratings), 
+#             y = Artist.Average.Ratings, fill = Artist.Name)) + geom_bar(stat="identity") + coord_flip() + theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) + theme(legend.position="none") + labs(x = "Artist Name", y = "Number of Ratings") + geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1)) 
 ```
 
 The next plot, shown below, includes the top 10 artists by average number of reviews. Again, The Velvet Underground and Nirvana are in the top 3, but Pink Floyd takes the third spot this time around, followed closely by Radiohead.
@@ -208,16 +201,8 @@ There are two outliers in the top 10 in terms of score here. Both Guns N' Roses 
 df_sorted_reviews = df_final[order(-df_final$Artist.Average.Reviews),]
 df_sorted_reviews = df_sorted_reviews[,c(3, 25, 26)]
 df_sorted_reviews = unique(df_sorted_reviews)[1:10,]
-df_sorted_reviews %>%
-  ggplot(aes(x = reorder(Artist.Name, Artist.Average.Reviews), 
-             y = Artist.Average.Reviews, fill = Artist.Name)) + 
-  geom_bar(stat="identity") + coord_flip() + 
-  theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) +
-  theme(legend.position="none") + 
-  labs(x = "Artist Name", y = "Number of Reviews") + 
-  geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1))
+#df_sorted_reviews %>% ggplot(aes(x = reorder(Artist.Name, Artist.Average.Reviews),  y = Artist.Average.Reviews, fill = Artist.Name)) + geom_bar(stat="identity") + coord_flip() + theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1)) +theme(legend.position="none") + labs(x = "Artist Name", y = "Number of Reviews") +  geom_text(aes(label=round(Artist.Average.Score, digit = 2), hjust = 1))
 ```
-
 
 ## Results 3 {data-link="Results 3"}
 
@@ -292,7 +277,6 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 Looking at the count for the genres over time, it can be seen that from the beginning of the 50s to the end of the 60s Hard Bop Jazz was the dominating genre for music. The 70s is the Rock era with Progressive and Hard Rock occurring the most with the Singer/Songwriter genre close to the Hard Rock genre. The 80s had Heavy Metal as the genre that occurred the most. Finally, East Coast Hip Hop is the most occurring genre for the 90s. The Singer/Songwriter and Progressive rock genre came back a little in the early 2000s.
 
 To answer the question: How do Genre's scores change over time? From the plot, the most popular genre's scores appear to oscillate over the years, with a fairly consistent average around 3.8 for all genres.
-
 
 ## Results 4 {data-link="Results 3"}
 
