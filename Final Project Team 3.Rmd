@@ -45,6 +45,7 @@ library(dplyr)
 library(tidyverse)
 library(stringr)
 library(lubridate)
+
 ```
 
 # Quick Data Summary
@@ -99,19 +100,6 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 |                        |                                                                                                                                                  | Year Range: 1947 - 2021 |
 +------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------+
 
-```{r}
-df_final <- read.csv("df_final.csv")
-
-nrow(unique(as.data.frame(df_final$Album)))
-  #Some albums have the same names
-nrow(unique(as.data.frame(df_final$Artist.Name)))
-  #2787 unique artists
-nrow(unique(as.data.frame(df_final$Genre_1)))
-  #453 unique primary genres
-summary(df_final)
-str(df_final)
-```
-
 # Results
 
 In your write-up, make sure to refer to all of the figures you create. You can include a hyperlink to the [scatterplot](#fig:scatterplot) by using the name of the code chunk (make sure, to give each code chunk a different name). In your markdown document you can create this link either by calling the function `chunkref` with the name of the code chunk in quotes, i.e. `r chunkref("scatterplot")` or by using the markdown expression `[scatterplot](#fig:scatterplot)`. Similarly, we can refer to the `r chunkref("2nd scatterplot")`. Note that the figure captions appear above the figures - this saves us from having to scroll up after following the link.
@@ -137,6 +125,7 @@ Additionally, you can also refer to different sections in your writeup by using 
 -What is the relationship between the release date and the score of the album? **Quita**
 
 ```{r}
+df_final <- read.csv("df_final.csv")
 ggplot(df_final, aes(x=`Year` , y =`Average.Rating`, color= `Year` ))  + geom_point(size=1.25) + theme(axis.text.x = element_text(angle = 90, size = 10)) +theme(legend.position="none")
 ```
 
@@ -206,7 +195,7 @@ df_sorted_reviews = unique(df_sorted_reviews)[1:10,]
 
 ## Results 3 {data-link="Results 3"}
 
-# Question: How do scores for genres change over time?
+This section will explore how scores for genres change over time.
 
 ```{r}
 length(unique(df_final$Genre_1))
@@ -223,7 +212,7 @@ df_final %>% group_by(Genre_1)%>% summarise(
 
 Progressive Rock, Singer/Songwriter, Hard Bop, Film Score, Hard Rock, Heavy Metal, and East Coast Hip Hop are the top seven genres the occur the most on the list.
 
-```{r}
+```{r Genre Scores Over Time, echo=FALSE, fig.cap="This is a lineplot grouped by the top 7 most common genres in the dataset. Most genre's scores oscillate around 3.8. However Heavy Metal had a steep decline during the 70s. It would be interesting to compare with the charts in future exploration.", message = FALSE}
 df_final%>% filter(Genre_1 == "Progressive Rock"|
             Genre_1 == "Singer/Songwriter"|
             Genre_1 == "Hard Bop"|
@@ -237,9 +226,9 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
               )%>% ggplot(aes(x = Year,y = Average.Score, group = Genre_1, color = Genre_1)) + geom_line()+ theme(axis.text.x = element_text(angle = 90, size = 10))
 ```
 
-Most genre's average scores over the years appear to be fairly consistent. Heavy Metal started out strong in 1970, but then suffered a steep decline by the end of the decade, plateauing around 3.75. Hard Rock had the lowest average score, and throughout the timeline barely broke 3.8 at its highest peak. Hard bop, Film Score, Singer/Songwriter and east coast hip hop seem to be oscillating around an average rating of 3.8.
+Most genre's average scores over the years appear to be fairly consistent. Heavy Metal started out strong in 1970, but then the genre suffered a steep decline by the end of the decade, plateauing around 3.75. Hard Rock had the lowest average score, and throughout the timeline barely broke 3.8 at its highest peak. Hard bop, Film Score, Singer/Songwriter and east coast hip hop seem to be oscillating around an average rating of 3.8.
 
-```{r}
+```{r Average Genre Scores, echo=FALSE, fig.cap="This is a barplot of the top 7 most common genres' average ratings. The highest scoring genre overall is Film Score, and the lowest scoring genre is Hard Rock. The average scores for each genre are very similar which makes sense as we are looking at the top 5000 albums so they all should have fairly high scores.", message = FALSE}
 df_final %>% group_by(Genre_1)%>% 
   filter(
     Genre_1 == "Progressive Rock"|
@@ -261,7 +250,7 @@ df_final %>% group_by(Genre_1)%>%
 
 The average scores for each genre are very similar which makes sense as we are looking at the top 5000 albums so they all should have fairly high scores. Film Score had the highest average score with 3.81, and Hard Rock had the lowest average score at 3.75.
 
-```{r}
+```{r Occurrence of Genres over Time, echo=FALSE, fig.cap="This is a lineplot of the counts of the top 7 most common genres over time. The 70s had the most albums from the most popular genres released. Progressive rock had the highest number of occurrences on the list, which was almost double any other peak", message = FALSE}
 df_final%>% filter(Genre_1 == "Progressive Rock"|
             Genre_1 == "Singer/Songwriter"|
             Genre_1 == "Hard Bop"|
@@ -276,7 +265,7 @@ df_final%>% filter(Genre_1 == "Progressive Rock"|
 
 Looking at the count for the genres over time, it can be seen that from the beginning of the 50s to the end of the 60s Hard Bop Jazz was the dominating genre for music. The 70s is the Rock era with Progressive and Hard Rock occurring the most with the Singer/Songwriter genre close to the Hard Rock genre. The 80s had Heavy Metal as the genre that occurred the most. Finally, East Coast Hip Hop is the most occurring genre for the 90s. The Singer/Songwriter and Progressive rock genre came back a little in the early 2000s.
 
-To answer the question: How do Genre's scores change over time? From the plot, the most popular genre's scores appear to oscillate over the years, with a fairly consistent average around 3.8 for all genres.
+In conclusion, the most popular genre's scores appear to oscillate over the years, with a fairly consistent average around 3.8 for all genres.
 
 ## Results 4 {data-link="Results 3"}
 
@@ -435,11 +424,15 @@ round(results,2)
 
 # Conclusions {data-link="Conclusions"}
 
-Give a quick summary of your work. Here is the place to be a bit critical and discuss potential limitations. Add a sentence on what else you would have liked to include in your data exploration if you had more time or more members in your team.
+To summarize, our investigation found that most higher rated albums were released before 1980. The most rated and reviewed artists on the list were Radiohead, The Velvet Underground, Nirvana, and Pink Floyd. There was no significant trend in ratings of genres over time. Of the most common genres, the highest rated genre was Film Score, and the lowest rated genre was Hard Rock. When the album was released had a negative correlation with the rating for the album, and the number of review and ratings had a positive correlation with the rating of the album.
+
+Some limitations of our investigation was that the demographic of the users inputting this data on rateyourmusic.com is unknown. If our team had more we thought it would be interesting to compare this dataset and our results with the albums charting data such as number of sales and if the album won any awards.
 
 ## Data source {.unnumbered}
 
-Where does the data come from, who owns the data? Where are all the scripts that you need to clean the data?
+<https://www.kaggle.com/datasets/tobennao/rym-top-5000>
+
+"rateyourmusic does not attempt to claim copyright or ownership of material that you submit, however, rateyourmusic claims a non-exclusive worldwide, royalty free, perpetual, non-revocable license to reproduce your material (Otherwise, we would not be able to display it to other users). In addition, you agree to give other users the same license to reprint or save your material for their personal use."
 
 ## References {.unnumbered}
 
