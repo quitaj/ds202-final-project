@@ -44,8 +44,6 @@ library(ggplot2)
 library(dplyr)
 library(tidyverse)
 library(stringr)
-library(lubridate)
-
 ```
 
 # Quick Data Summary
@@ -102,27 +100,9 @@ Our dataset is the list of the top 5000 rated albums on the website rateyourmusi
 
 # Results
 
-In your write-up, make sure to refer to all of the figures you create. You can include a hyperlink to the [scatterplot](#fig:scatterplot) by using the name of the code chunk (make sure, to give each code chunk a different name). In your markdown document you can create this link either by calling the function `chunkref` with the name of the code chunk in quotes, i.e. `r chunkref("scatterplot")` or by using the markdown expression `[scatterplot](#fig:scatterplot)`. Similarly, we can refer to the `r chunkref("2nd scatterplot")`. Note that the figure captions appear above the figures - this saves us from having to scroll up after following the link.
-
-```{r scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
-
-mtcars %>% 
-  ggplot(aes(x = wt, y = mpg)) + 
-  geom_point()
-```
-
-```{r 2nd scatterplot, echo=FALSE, fig.cap="This is the figure caption. Make sure to use the description we practised in the homework: first sentence describes structure of the plot, second sentence describes main finding, third sentence describes outliers/follow-up.", message = FALSE}
-
-mtcars %>% 
-  ggplot(aes(x = wt, y = mpg)) + 
-  geom_point()
-```
-
-Additionally, you can also refer to different sections in your writeup by using anchors (links) to section headers. Here, we are referring to subsection [Results 3]. The code for that is `[Results 3]`.
-
 ## Results 1 {data-link="Results 1"}
 
--What is the relationship between the release date and the score of the album? **Quita**
+What is the relationship between the release date and the score of the album?
 
 ```{r}
 df_final <- read.csv("df_final.csv")
@@ -162,9 +142,7 @@ Comclusion: Overall, I would say that there is a pattern of when the album is re
 
 ## Results 2 {data-link="Results 2"}
 
--What is the relationship between the number of reviews/ratings and the artist? This helps determine the relative popularity of artists on this website.
-
-**Soren** \# Question 2: Who are the most well-known artists on this website, and does that correlate with high scores?
+Who are the most well-known artists on this website, and does that correlate with high scores?
 
 Answering this question will involve determining the average number of ratings/reviews per artist. This can be accomplished using mutate statements to create two new columns, one for average number of ratings per artist, and one for average number of reviews per artist. The number of reviews per artist will be much lower than the number of ratings, because writing a review takes much more time and effort than simply providing a score from 1-5. This is not a reflection of an artist's popularity outside the context of this website, as this is a website for dedicated fans of music, who tend to have different tastes than the general public.
 
@@ -269,13 +247,7 @@ In conclusion, the most popular genre's scores appear to oscillate over the year
 
 ## Results 4 {data-link="Results 3"}
 
--What is the relationship between score and other variables, such as genre, descriptors, and artist? **Jasper**
-
-By answering this question we will be able to have a better idea of how albums are scored and what the stronger criterion are that affect scores for each album. First we will look for the unique values of genres, descriptors and artists to identify how many of each category we have. Once that is accomplished, we will be using the dplyr library and grouping the data by genre to graph it with the ggplot library. Using these graphs we will be able to see how different categories affect score.
-
-# First: Identify Question
-
-# Question: What is the relationship between score and other variables, such as genre, descriptors, and artist?
+What is the relationship between score and other variables, such as genre, descriptors, and artist?
 
 ### Find the Top 10 Most Common Genres, Descriptors, and Artists
 
@@ -433,7 +405,3 @@ Some limitations of our investigation was that the demographic of the users inpu
 <https://www.kaggle.com/datasets/tobennao/rym-top-5000>
 
 "rateyourmusic does not attempt to claim copyright or ownership of material that you submit, however, rateyourmusic claims a non-exclusive worldwide, royalty free, perpetual, non-revocable license to reproduce your material (Otherwise, we would not be able to display it to other users). In addition, you agree to give other users the same license to reprint or save your material for their personal use."
-
-## References {.unnumbered}
-
-List all resources you used.
